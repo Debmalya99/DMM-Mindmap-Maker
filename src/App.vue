@@ -161,6 +161,8 @@ let initialEdges = [
   { id: 'e1-3', source: '1', target: '3', sourceHandle: 'left', targetHandle: 'right', type: 'default', animated: false, style: edgeStyle, data: { dirMode: 0 } },
 ]
 
+
+// DOC: Loads the data from the saved state
 if (savedState) {
   try {
     const parsed = JSON.parse(savedState)
@@ -181,6 +183,7 @@ if (savedState) {
 const nodes = ref(initialNodes)
 const edges = ref(initialEdges)
 
+// DOC: Watches any changes here and writes to the local storage.
 watch([nodes, edges], () => {
   try {
     const state = {
@@ -616,7 +619,7 @@ body {
 }
 
 .vue-flow__edge-text {
-  font-size: 10px;
+  font-size: 20px;
   fill: #2c3e50;
 }
 
