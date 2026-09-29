@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+
+# Build outputs & bundled assets
+dist/
+resources.neu
+resources/js/neutralino.js
+.vite/
+
+# Editor / OS specific
+.DS_Store
+Thumbs.db
+*.log
+.env
+.env.local
