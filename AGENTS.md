@@ -20,7 +20,7 @@ This repo is a NeutralinoJS desktop app for mindmaps using Vue.js.
 ## Technology Choices
 - Language: JavaScript (Vue 3)
 - UI: Vue 3 framework
-- Mindmap rendering: To be implemented (consider a canvas library like GoJS, Drawflow, or custom SVG/Canvas)
+- Mindmap rendering: Vue Flow
 
 ## Notes
 - Follow NeutralinoJS documentation for packaging and distribution.
