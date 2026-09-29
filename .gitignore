@@ -3,8 +3,6 @@ node_modules/
 
 # Build outputs & bundled assets
 dist/
-resources.neu
-resources/js/neutralino.js
 .vite/
 
 # Editor / OS specific
