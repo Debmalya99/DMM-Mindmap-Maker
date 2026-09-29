@@ -7,7 +7,7 @@
   "defaultMode": "window",
   "port": 0,
   "documentRoot": "/resources/",
-  "url": "http://localhost:3000",
+  "url": "",
   "enableServer": true,
   "enableNativeAPI": true,
   "tokenSecurity": "one-time",
