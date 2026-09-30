@@ -16,6 +16,8 @@
 
           <!-- Color Palette (Shows up when a node is selected) -->
           <div class="color-palette-section" v-if="selectedNodeId">
+            <h3>Node Options</h3>
+            <button @click="duplicateNode(selectedNodeId)" class="btn secondary">Duplicate Node</button>
             <h3>Node Color</h3>
             <div class="color-grid">
               <button
@@ -51,7 +53,6 @@
 
           <div class="help-text">
             <small>💡 Drag from any pin (top, bottom, left, right) to another pin to create precise solid Bezier connections. Click a node to edit markdown/LaTeX or change its color.
-              Press ctrl-d on the keyboard to duplicate any selected node.
             </small>
           </div>
         </div>
@@ -84,7 +85,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted, markRaw } from 'vue'
+import { ref, computed, watch, onMounted, markRaw, toRaw } from 'vue'
 import { VueFlow, useVueFlow, ConnectionMode, MarkerType } from '@vue-flow/core'
 import { Background } from '@vue-flow/background'
 import { Controls } from '@vue-flow/controls'
@@ -132,7 +133,7 @@ const nodeTypes = {
   mindmap: markRaw(MindmapNode),
 }
 
-const savedState = localStorage.getItem('mindmap_state')
+// const savedState = localStorage.getItem('mindmap_state')
 let initialNodes = [
   {
     id: '1',
@@ -144,16 +145,16 @@ let initialNodes = [
   {
     id: '2',
     type: 'mindmap',
-    position: { x: 50, y: 300 },
+    position: { x: 450, y: 300 },
     style: { width: '160px', height: '160px' },
-    data: { label: 'Branch 1', bgColor: '#ffffff' },
+    data: { label: 'Explanation 1', bgColor: '#ffffff' },
   },
   {
     id: '3',
     type: 'mindmap',
-    position: { x: 450, y: 300 },
+    position: { x: 50, y: 300 },
     style: { width: '160px', height: '160px' },
-    data: { label: 'Branch 2', bgColor: '#ffffff' },
+    data: { label: 'Explanation 2', bgColor: '#ffffff' },
   },
 ]
 let initialEdges = [
@@ -163,6 +164,7 @@ let initialEdges = [
 
 
 // DOC: Loads the data from the saved state
+/*
 if (savedState) {
   try {
     const parsed = JSON.parse(savedState)
@@ -179,11 +181,13 @@ if (savedState) {
     console.error('Failed to load saved mindmap state:', e)
   }
 }
+*/
 
 const nodes = ref(initialNodes)
 const edges = ref(initialEdges)
 
 // DOC: Watches any changes here and writes to the local storage.
+/*
 watch([nodes, edges], () => {
   try {
     const state = {
@@ -195,6 +199,7 @@ watch([nodes, edges], () => {
     console.error('Failed to save mindmap state:', e)
   }
 }, { deep: true })
+*/
 
 const { onConnect, addEdges, fitView, screenToFlowCoordinate } = useVueFlow()
 
@@ -321,13 +326,21 @@ const duplicateNode = (id) => {
   const newId = String(Date.now())
   const offset = 180
 
-  nodes.value.push({
-    ...source,
+  const rawSource = toRaw(source)
+  const { dimensions, handleBounds, computedPosition, selected, dragging, ...cleanSource } = rawSource
+
+  const clonedNode = {
+    ...cleanSource,
     id: newId,
-    position: { x: source.position.x + offset, y: source.position.y + offset },
-    data: { ...source.data },
-    style: { ...source.style },
-  })
+    position: {
+      x: rawSource.position.x + offset,
+      y: rawSource.position.y + offset,
+    },
+    data: rawSource.data ? { ...rawSource.data } : {},
+    style: rawSource.style ? { ...rawSource.style } : {},
+  }
+
+  nodes.value.push(clonedNode)
 
   // Duplicate starts unconnected, so no edges are copied
   selectedNodeId.value = newId
@@ -375,7 +388,7 @@ onMounted(() => {
     }
   })
 
-  // Keyboard shortcuts for delete (nodes/connectors) and duplicate (nodes)
+  // Keyboard shortcuts for delete (nodes/connectors)
   window.addEventListener('keydown', (e) => {
     const target = e.target
     const isInInput = target instanceof HTMLElement && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)
@@ -396,21 +409,6 @@ onMounted(() => {
         return
       }
     }
-
-    // Ctrl/Cmd + D duplicates the currently selected node
-    if (!e.ctrlKey && !e.metaKey) return
-    if (e.key.toLowerCase() !== 'd') return
-    if (!selectedNodeId.value) return
-
-    if (target instanceof HTMLElement) {
-      if (!isNodeEditor) {
-        const tag = target.tagName
-        if (tag === 'INPUT' || tag === 'TEXTAREA' || target.isContentEditable) return
-      }
-    }
-
-    e.preventDefault()
-    duplicateNode(selectedNodeId.value)
   })
 })
 </script>
