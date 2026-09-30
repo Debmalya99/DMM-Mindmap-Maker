@@ -158,8 +158,8 @@ let initialNodes = [
   },
 ]
 let initialEdges = [
-  { id: 'e1-2', source: '1', target: '2', sourceHandle: 'right', targetHandle: 'left', type: 'default', animated: false, style: edgeStyle, data: { dirMode: 0 } },
-  { id: 'e1-3', source: '1', target: '3', sourceHandle: 'left', targetHandle: 'right', type: 'default', animated: false, style: edgeStyle, data: { dirMode: 0 } },
+  { id: 'e1-2', source: '1', target: '2', sourceHandle: 'right', targetHandle: 'left', type: 'default', animated: false, style: { ...edgeStyle }, data: { dirMode: 0 } },
+  { id: 'e1-3', source: '1', target: '3', sourceHandle: 'left', targetHandle: 'right', type: 'default', animated: false, style: { ...edgeStyle }, data: { dirMode: 0 } },
 ]
 
 
@@ -205,7 +205,7 @@ const { onConnect, addEdges, fitView, screenToFlowCoordinate } = useVueFlow()
 
 onConnect((connection) => {
   if (connection.source === connection.target) return
-  addEdges({ ...connection, type: 'default', animated: false, style: edgeStyle, data: { dirMode: 0 } })
+  addEdges({ ...connection, type: 'default', animated: false, style: { ...edgeStyle }, data: { dirMode: 0 } })
 })
 
 const onConnectStart = () => {
@@ -266,13 +266,16 @@ const updateEdgeLabel = (event) => {
 const toggleEdgeStyle = () => {
   const edge = getSelectedEdge.value
   if (!edge) return
-  if (!edge.style) edge.style = { ...edgeStyle }
 
-  if (edge.style.strokeDasharray) {
-    delete edge.style.strokeDasharray
+  const currentStyle = edge.style ? { ...edge.style } : { ...edgeStyle }
+
+  if (currentStyle.strokeDasharray) {
+    delete currentStyle.strokeDasharray
   } else {
-    edge.style.strokeDasharray = '6 6'
+    currentStyle.strokeDasharray = '6 6'
   }
+
+  edge.style = currentStyle
 }
 
 const getNodeColor = (id) => {
