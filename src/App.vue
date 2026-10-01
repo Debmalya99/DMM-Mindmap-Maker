@@ -14,6 +14,9 @@
                 <span class="help-icon" title="Help & Tips">💡</span>
                 <div class="help-popover">
                   <small>Drag from any pin (top, bottom, left, right) to another pin to create precise solid connections. Click a node to edit markdown/LaTeX or change its color. Shift-LeftClick & Drag to select multiple nodes.</small>
+                  <div class="help-shortcuts">
+                    <small><strong>Ctrl+A</strong> add node &middot; <strong>Ctrl+S</strong> save &middot; <strong>Ctrl+O</strong> open</small>
+                  </div>
                 </div>
               </div>
             </div>
@@ -522,11 +525,37 @@ onMounted(() => {
     }
   })
 
-  // Keyboard shortcuts for delete (nodes/connectors)
+  // Keyboard shortcuts for delete (nodes/connectors) and app hotkeys
   window.addEventListener('keydown', (e) => {
     const target = e.target
     const isInInput = target instanceof HTMLElement && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)
     const isNodeEditor = target instanceof HTMLElement && target.closest('.custom-mindmap-node') !== null
+
+    // App hotkeys (Ctrl on Windows/Linux, Cmd on macOS)
+    if (e.ctrlKey || e.metaKey) {
+      const key = e.key.toLowerCase()
+
+      if (key === 's') {
+        e.preventDefault()
+        saveMindmap()
+        return
+      }
+
+      if (key === 'o') {
+        e.preventDefault()
+        loadMindmap()
+        return
+      }
+
+      // Suppressed while typing so native select-all keeps working in editors
+      if (key === 'a' && !isInInput) {
+        e.preventDefault()
+        addNode()
+        return
+      }
+
+      return
+    }
 
     // Delete key binding
     if (e.key === 'Delete') {
@@ -822,6 +851,18 @@ body {
 .help-tooltip-container:hover .help-popover {
   visibility: visible;
   opacity: 1;
+}
+
+.help-shortcuts {
+  margin-top: 0.6rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #e8e8e8;
+  color: #555;
+}
+
+.help-shortcuts strong {
+  color: #247ad1;
+  font-weight: 600;
 }
 
 .toolbar-actions {
