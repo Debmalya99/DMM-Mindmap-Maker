@@ -716,12 +716,18 @@ body {
   flex-direction: column;
   gap: 1rem;
   z-index: 10;
+  position: relative;
   transition: width 0.3s ease, padding 0.3s ease;
 }
 
+/* Collapsed: the panel itself disappears, leaving only a floating hamburger */
 .sidebar.collapsed {
-  width: 70px;
-  padding: 1.5rem 0.75rem;
+  width: 0;
+  padding: 0;
+  gap: 0;
+  background: transparent;
+  border-right-color: transparent;
+  overflow: visible;
 }
 
 .sidebar-header {
@@ -743,7 +749,22 @@ body {
 }
 
 .sidebar.collapsed .sidebar-header {
-  justify-content: center;
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+}
+
+.sidebar.collapsed .hamburger-btn {
+  background: transparent;
+  border-color: transparent;
+  color: #2c3e50;
+  opacity: 0.55;
+}
+
+.sidebar.collapsed .hamburger-btn:hover {
+  background: rgba(255, 255, 255, 0.75);
+  border-color: #d0d7de;
+  opacity: 1;
 }
 
 .hamburger-btn {
@@ -758,7 +779,7 @@ body {
   align-items: center;
   justify-content: center;
   color: #2c3e50;
-  transition: background 0.2s;
+  transition: background 0.2s, border-color 0.2s, opacity 0.2s;
 }
 
 .hamburger-btn:hover {
