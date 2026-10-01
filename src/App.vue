@@ -7,7 +7,10 @@
           <button @click="toggleToolbar" class="hamburger-btn" title="Toggle Toolbar">
             ☰
           </button>
-          <h2 v-if="!isToolbarCollapsed">Toolbar</h2>
+          <div class="header-titles" v-if="!isToolbarCollapsed">
+            <h2>Toolbar</h2>
+            <div class="current-file-name">{{ currentFileName }}</div>
+          </div>
         </div>
 
         <div class="sidebar-body" v-if="!isToolbarCollapsed">
@@ -92,7 +95,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted, markRaw, toRaw } from 'vue'
+import { ref, computed, watch, watchEffect, onMounted, markRaw, toRaw } from 'vue'
 import { VueFlow, useVueFlow, ConnectionMode, MarkerType } from '@vue-flow/core'
 import { Background } from '@vue-flow/background'
 import { Controls } from '@vue-flow/controls'
@@ -108,6 +111,23 @@ const isConnecting = ref(false)
 const selectedNodeId = ref(null)
 const selectedEdgeId = ref(null)
 const currentFileHandle = ref(null)
+
+const currentFileName = computed(() => {
+  if (!currentFileHandle.value || !currentFileHandle.value.name) {
+    return 'untitled*'
+  }
+  let name = currentFileHandle.value.name
+  if (name.endsWith('.dmm.json')) {
+    name = name.slice(0, -9)
+  } else if (name.endsWith('.json')) {
+    name = name.slice(0, -5)
+  }
+  return name
+})
+
+watchEffect(() => {
+  document.title = `Mindmap Maker | ${currentFileName.value}`
+})
 
 const colors = ['#fffff0', '#8bbd88', '#e07163', '#6a8aeb', '#e6eb6a']
 
@@ -570,6 +590,18 @@ body {
   display: flex;
   align-items: center;
   gap: 1rem;
+}
+
+.header-titles {
+  display: flex;
+  flex-direction: column;
+}
+
+.current-file-name {
+  font-style: italic;
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 2px;
 }
 
 .sidebar.collapsed .sidebar-header {
