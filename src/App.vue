@@ -623,14 +623,17 @@ onMounted(() => {
         return
       }
 
-      // Suppressed while typing so native select-all keeps working in editors
+      // Guarded: Ctrl+A means "select all text" inside a textarea, so the
+      // native behaviour has to survive while editing
       if (key === 'a' && !isInInput) {
         e.preventDefault()
         addNode()
         return
       }
 
-      if (key === 'd' && !isInInput) {
+      // Unguarded: Ctrl+D has no native text meaning, so it would otherwise
+      // fall through and trigger the browser bookmark even while editing
+      if (key === 'd') {
         e.preventDefault()
         duplicateSelectedNodes()
         return
