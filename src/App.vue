@@ -9,7 +9,7 @@
           </button>
           <div class="header-titles" v-if="!isToolbarCollapsed">
             <div class="title-row">
-              <h2>Toolbar</h2>
+              <h3 class="current-file-name" :title="currentFileName">{{ currentFileName }}</h3>
               <div class="help-tooltip-container">
                 <span class="help-icon" title="Help & Tips">💡</span>
                 <div class="help-popover">
@@ -20,7 +20,6 @@
                 </div>
               </div>
             </div>
-            <div class="current-file-name">{{ currentFileName }}</div>
           </div>
         </div>
 
@@ -739,13 +738,18 @@ body {
 .header-titles {
   display: flex;
   flex-direction: column;
+  flex: 1;
+  min-width: 0;
 }
 
 .current-file-name {
-  font-style: italic;
-  font-size: 0.85rem;
-  color: #666;
-  margin-top: 2px;
+  font-size: 1.05rem;
+  color: #2c3e50;
+  font-weight: 600;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .sidebar.collapsed .sidebar-header {
