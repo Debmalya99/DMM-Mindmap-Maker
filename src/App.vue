@@ -60,6 +60,7 @@
 
         <div class="toolbar-actions" v-if="!isToolbarCollapsed">
           <button @click="saveMindmap" class="btn action-btn">Save</button>
+          <button @click="saveAsMindmap" class="btn action-btn">Save As</button>
           <button @click="loadMindmap" class="btn action-btn">Load</button>
         </div>
 
@@ -106,6 +107,7 @@ const isToolbarCollapsed = ref(false)
 const isConnecting = ref(false)
 const selectedNodeId = ref(null)
 const selectedEdgeId = ref(null)
+const currentFileHandle = ref(null)
 
 const colors = ['#fffff0', '#8bbd88', '#e07163', '#6a8aeb', '#e6eb6a']
 
@@ -374,7 +376,7 @@ const deleteSelectedEdge = () => {
   selectedEdgeId.value = null
 }
 
-const saveMindmap = async () => {
+const saveAsMindmap = async () => {
   if (!window.showSaveFilePicker) {
     alert('File System Access API is not supported in this browser.')
     return
@@ -388,6 +390,7 @@ const saveMindmap = async () => {
         },
       ],
     })
+    currentFileHandle.value = handle
     const writable = await handle.createWritable()
     const state = {
       nodes: toRaw(nodes.value),
@@ -397,8 +400,29 @@ const saveMindmap = async () => {
     await writable.close()
   } catch (err) {
     if (err.name !== 'AbortError') {
-      console.error('Failed to save mindmap:', err)
+      console.error('Failed to save as mindmap:', err)
       alert('Failed to save mindmap file.')
+    }
+  }
+}
+
+const saveMindmap = async () => {
+  if (!currentFileHandle.value) {
+    await saveAsMindmap()
+    return
+  }
+  try {
+    const writable = await currentFileHandle.value.createWritable()
+    const state = {
+      nodes: toRaw(nodes.value),
+      edges: toRaw(edges.value),
+    }
+    await writable.write(JSON.stringify(state, null, 2))
+    await writable.close()
+  } catch (err) {
+    if (err.name !== 'AbortError') {
+      console.error('Failed to save mindmap in place:', err)
+      await saveAsMindmap()
     }
   }
 }
@@ -418,6 +442,7 @@ const loadMindmap = async () => {
       ],
       multiple: false,
     })
+    currentFileHandle.value = handle
     const file = await handle.getFile()
     const content = await file.text()
     const parsed = JSON.parse(content)
