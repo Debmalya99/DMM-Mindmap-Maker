@@ -15,7 +15,7 @@
                 <div class="help-popover">
                   <small>Drag from any pin (top, bottom, left, right) to another pin to create precise solid connections. Click a node to edit markdown/LaTeX or change its color. Shift-LeftClick & Drag to select multiple nodes.</small>
                   <div class="help-shortcuts">
-                    <small><strong>Ctrl+A</strong> add node &middot; <strong>Ctrl+S</strong> save &middot; <strong>Ctrl+O</strong> open</small>
+                    <small><strong>Ctrl+A</strong> add node &middot; <strong>Ctrl+D</strong> duplicate &middot; <strong>Ctrl+S</strong> save &middot; <strong>Ctrl+O</strong> open</small>
                   </div>
                 </div>
               </div>
@@ -125,6 +125,20 @@ const isConnecting = ref(false)
 const selectedNodeId = ref(null)
 const selectedEdgeId = ref(null)
 const currentFileHandle = ref(null)
+
+// Remembers the last node the user clicked, so Ctrl+D still has a target
+// after the selection has been cleared
+const lastClickedNodeId = ref(null)
+
+// Unique per-entity id. Date.now() collides when several nodes are cloned in
+// the same tick, which would break a group duplicate. randomUUID needs a
+// secure context, hence the counter fallback.
+let idCounter = 0
+const generateId = () => {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) return crypto.randomUUID()
+  idCounter += 1
+  return `node-${Date.now()}-${idCounter}`
+}
 
 const currentFileName = computed(() => {
   if (!currentFileHandle.value || !currentFileHandle.value.name) {
@@ -261,6 +275,7 @@ const onConnectEnd = () => {
 const onNodeClick = (event) => {
   selectedNodeId.value = event.node.id
   selectedEdgeId.value = null
+  lastClickedNodeId.value = event.node.id
 }
 
 const onEdgeClick = (event) => {
@@ -364,32 +379,93 @@ const addNode = () => {
   selectedEdgeId.value = null
 }
 
-const duplicateNode = (id) => {
-  const source = nodes.value.find((n) => n.id === id)
-  if (!source) return
+// Uniform offset applied to every cloned node, so a group duplicate keeps its
+// internal layout and can be dragged around as one unit
+const DUPLICATE_OFFSET = 180
 
-  const newId = String(Date.now())
-  const offset = 180
+// Rebuild the arrow markers from the stored direction mode, matching what
+// loadMindmap does when reading a file back
+const edgeMarkersFor = (edge) => ({
+  markerStart: edge.data?.dirMode === 2 || edge.data?.dirMode === 3 ? buildMarker() : undefined,
+  markerEnd: edge.data?.dirMode === 1 || edge.data?.dirMode === 3 ? buildMarker() : undefined,
+})
 
-  const rawSource = toRaw(source)
-  const { dimensions, handleBounds, computedPosition, selected, dragging, ...cleanSource } = rawSource
+// Clones the given nodes plus only those connectors whose source AND target
+// are both inside the set, so the result is a self-contained mini mindmap
+const duplicateNodes = (ids) => {
+  const sourceIdSet = new Set(ids)
+  if (sourceIdSet.size === 0) return
 
-  const clonedNode = {
-    ...cleanSource,
-    id: newId,
-    position: {
-      x: rawSource.position.x + offset,
-      y: rawSource.position.y + offset,
-    },
-    data: rawSource.data ? { ...rawSource.data } : {},
-    style: rawSource.style ? { ...rawSource.style } : {},
-  }
+  const idMap = new Map()
+  const clonedNodes = []
 
-  nodes.value.push(clonedNode)
+  nodes.value.forEach((node) => {
+    if (!sourceIdSet.has(node.id)) return
 
-  // Duplicate starts unconnected, so no edges are copied
-  selectedNodeId.value = newId
+    const rawNode = toRaw(node)
+    const { dimensions, handleBounds, computedPosition, selected, dragging, ...cleanNode } = rawNode
+
+    const newId = generateId()
+    idMap.set(node.id, newId)
+
+    clonedNodes.push({
+      ...cleanNode,
+      id: newId,
+      selected: true,
+      position: {
+        x: rawNode.position.x + DUPLICATE_OFFSET,
+        y: rawNode.position.y + DUPLICATE_OFFSET,
+      },
+      data: rawNode.data ? { ...rawNode.data } : {},
+      style: rawNode.style ? { ...rawNode.style } : {},
+    })
+  })
+
+  if (clonedNodes.length === 0) return
+
+  const clonedEdges = edges.value
+    .filter((edge) => sourceIdSet.has(edge.source) && sourceIdSet.has(edge.target))
+    .map((edge) => {
+      const rawEdge = toRaw(edge)
+      const { selected, ...cleanEdge } = rawEdge
+
+      return {
+        ...cleanEdge,
+        ...edgeMarkersFor(rawEdge),
+        id: generateId(),
+        source: idMap.get(rawEdge.source),
+        target: idMap.get(rawEdge.target),
+        style: rawEdge.style ? { ...rawEdge.style } : { ...edgeStyle },
+        data: rawEdge.data ? { ...rawEdge.data } : {},
+      }
+    })
+
+  // Deselect the originals so dragging a clone does not drag both copies
+  nodes.value.forEach((node) => {
+    if (sourceIdSet.has(node.id)) node.selected = false
+  })
+
+  nodes.value.push(...clonedNodes)
+  edges.value.push(...clonedEdges)
+
   selectedEdgeId.value = null
+
+  // A lone clone stays the active node so the Node Options panel keeps
+  // working; a group has no single active node
+  selectedNodeId.value = clonedNodes.length === 1 ? clonedNodes[0].id : null
+}
+
+const duplicateNode = (id) => {
+  duplicateNodes([id])
+}
+
+// Resolves what Ctrl+D should act on: the box/shift selection first, then the
+// active node, then whatever was clicked most recently
+const duplicateSelectedNodes = () => {
+  const multiSelected = nodes.value.filter((node) => node.selected).map((node) => node.id)
+  if (multiSelected.length > 0) return duplicateNodes(multiSelected)
+  if (selectedNodeId.value) return duplicateNodes([selectedNodeId.value])
+  if (lastClickedNodeId.value) return duplicateNodes([lastClickedNodeId.value])
 }
 
 const deleteNode = (id) => {
@@ -551,6 +627,12 @@ onMounted(() => {
       if (key === 'a' && !isInInput) {
         e.preventDefault()
         addNode()
+        return
+      }
+
+      if (key === 'd' && !isInInput) {
+        e.preventDefault()
+        duplicateSelectedNodes()
         return
       }
 
