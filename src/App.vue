@@ -41,6 +41,16 @@
                 :title="color"
               ></button>
             </div>
+            <div class="custom-color-picker-row">
+              <label for="custom-node-color">Custom Color:</label>
+              <input
+                id="custom-node-color"
+                type="color"
+                class="color-picker-input"
+                :value="getNodeColor(selectedNodeId)"
+                @input="(e) => updateNodeColor(e.target.value)"
+              />
+            </div>
           </div>
 
           <!-- Connector Direction (Shows up when a connector is selected) -->
@@ -864,5 +874,33 @@ body {
 
 .vue-flow__node-resizer line {
   stroke: transparent !important;
+}
+
+.custom-color-picker-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: #2c3e50;
+}
+
+.color-picker-input {
+  -webkit-appearance: none;
+  border: none;
+  width: 36px;
+  height: 28px;
+  border-radius: 4px;
+  cursor: pointer;
+  background: transparent;
+}
+
+.color-picker-input::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.color-picker-input::-webkit-color-swatch {
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 </style>
