@@ -24,3 +24,6 @@ This repo is a web application for mindmaps using Vue.js and Vite.
 ## Notes
 - Ensure any build artifacts (`dist/`, `.vite/`) are excluded from version control.
 - The app entrypoint is `index.html` (bundled into `dist/index.html`) which loads `src/main.js`.
+
+## IMPORTANT INSTRUCTIONS
+Always ask the user confirmation before making any Git related changes

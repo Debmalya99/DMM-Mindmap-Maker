@@ -58,6 +58,11 @@
           </div>
         </div>
 
+        <div class="toolbar-actions" v-if="!isToolbarCollapsed">
+          <button @click="saveMindmap" class="btn action-btn">Save</button>
+          <button @click="loadMindmap" class="btn action-btn">Load</button>
+        </div>
+
         <div class="toolbar-footer" v-if="!isToolbarCollapsed">
           <span>Nodes: {{ nodes.length }}</span> | <span>Connections: {{ edges.length }}</span>
         </div>
@@ -369,6 +374,75 @@ const deleteSelectedEdge = () => {
   selectedEdgeId.value = null
 }
 
+const saveMindmap = async () => {
+  if (!window.showSaveFilePicker) {
+    alert('File System Access API is not supported in this browser.')
+    return
+  }
+  try {
+    const handle = await window.showSaveFilePicker({
+      types: [
+        {
+          description: 'Mindmap Files',
+          accept: { 'application/json': ['.json'] },
+        },
+      ],
+    })
+    const writable = await handle.createWritable()
+    const state = {
+      nodes: toRaw(nodes.value),
+      edges: toRaw(edges.value),
+    }
+    await writable.write(JSON.stringify(state, null, 2))
+    await writable.close()
+  } catch (err) {
+    if (err.name !== 'AbortError') {
+      console.error('Failed to save mindmap:', err)
+      alert('Failed to save mindmap file.')
+    }
+  }
+}
+
+const loadMindmap = async () => {
+  if (!window.showOpenFilePicker) {
+    alert('File System Access API is not supported in this browser.')
+    return
+  }
+  try {
+    const [handle] = await window.showOpenFilePicker({
+      types: [
+        {
+          description: 'Mindmap Files',
+          accept: { 'application/json': ['.json'] },
+        },
+      ],
+      multiple: false,
+    })
+    const file = await handle.getFile()
+    const content = await file.text()
+    const parsed = JSON.parse(content)
+
+    if (parsed.nodes) {
+      nodes.value = parsed.nodes
+    }
+    if (parsed.edges) {
+      edges.value = parsed.edges.map((e) => ({
+        ...e,
+        style: e.style || edgeStyle,
+        markerStart: e.data?.dirMode === 2 || e.data?.dirMode === 3 ? buildMarker() : undefined,
+        markerEnd: e.data?.dirMode === 1 || e.data?.dirMode === 3 ? buildMarker() : undefined,
+      }))
+    }
+    selectedNodeId.value = null
+    selectedEdgeId.value = null
+  } catch (err) {
+    if (err.name !== 'AbortError') {
+      console.error('Failed to load mindmap:', err)
+      alert('Failed to load mindmap file.')
+    }
+  }
+}
+
 const recenterMap = () => {
   fitView({ padding: 0.2, duration: 800 })
 }
@@ -644,12 +718,28 @@ body {
   border: 1px solid #eee;
 }
 
-.toolbar-footer {
+.toolbar-actions {
+  display: flex;
+  gap: 0.5rem;
   margin-top: auto;
+  padding-top: 0.75rem;
+}
+
+.toolbar-actions .action-btn {
+  flex: 1;
+  background: #247ad1;
+  color: white;
+}
+
+.toolbar-actions .action-btn:hover {
+  background: #1f68b3;
+}
+
+.toolbar-footer {
   font-size: 0.85rem;
   color: #555;
   text-align: center;
-  padding-top: 0.75rem;
+  padding-top: 0.5rem;
   border-top: 1px solid #eee;
   white-space: nowrap;
 }
