@@ -385,8 +385,8 @@ const saveAsMindmap = async () => {
     const handle = await window.showSaveFilePicker({
       types: [
         {
-          description: 'Mindmap Files',
-          accept: { 'application/json': ['.json'] },
+          description: 'Mindmap Files (.dmm.json)',
+          accept: { 'application/json': ['.dmm.json'] },
         },
       ],
     })
@@ -436,8 +436,8 @@ const loadMindmap = async () => {
     const [handle] = await window.showOpenFilePicker({
       types: [
         {
-          description: 'Mindmap Files',
-          accept: { 'application/json': ['.json'] },
+          description: 'Mindmap Files (.dmm.json, .json)',
+          accept: { 'application/json': ['.dmm.json', '.json'] },
         },
       ],
       multiple: false,
