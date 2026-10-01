@@ -28,32 +28,36 @@
           <button @click="addNode" class="btn primary">Add Node</button>
           <button @click="recenterMap" class="btn secondary">Re-center MindMap</button>
 
-          <!-- Color Palette (Shows up when a node is selected) -->
-          <div class="color-palette-section" v-if="selectedNodeId">
+          <!-- Node Options (Shows up when one or more nodes are selected) -->
+          <div class="color-palette-section" v-if="hasNodeSelection">
             <h3>Node Options</h3>
-            <button @click="duplicateNode(selectedNodeId)" class="btn secondary">Duplicate Node</button>
-            <h3>Node Color</h3>
-            <div class="color-grid">
-              <button
-                v-for="color in colors"
-                :key="color"
-                class="color-swatch"
-                :style="{ backgroundColor: color }"
-                :class="{ active: getNodeColor(selectedNodeId) === color }"
-                @click="updateNodeColor(color)"
-                :title="color"
-              ></button>
-            </div>
-            <div class="custom-color-picker-row">
-              <label for="custom-node-color">Custom Color:</label>
-              <input
-                id="custom-node-color"
-                type="color"
-                class="color-picker-input"
-                :value="getNodeColor(selectedNodeId)"
-                @input="(e) => updateNodeColor(e.target.value)"
-              />
-            </div>
+            <button @click="duplicateSelectedNodes" class="btn secondary">{{ duplicateButtonLabel }}</button>
+
+            <!-- Colour is per-node, so it needs a single active node -->
+            <template v-if="selectedNodeId">
+              <h3>Node Color</h3>
+              <div class="color-grid">
+                <button
+                  v-for="color in colors"
+                  :key="color"
+                  class="color-swatch"
+                  :style="{ backgroundColor: color }"
+                  :class="{ active: getNodeColor(selectedNodeId) === color }"
+                  @click="updateNodeColor(color)"
+                  :title="color"
+                ></button>
+              </div>
+              <div class="custom-color-picker-row">
+                <label for="custom-node-color">Custom Color:</label>
+                <input
+                  id="custom-node-color"
+                  type="color"
+                  class="color-picker-input"
+                  :value="getNodeColor(selectedNodeId)"
+                  @input="(e) => updateNodeColor(e.target.value)"
+                />
+              </div>
+            </template>
           </div>
 
           <!-- Connector Direction (Shows up when a connector is selected) -->
@@ -290,6 +294,19 @@ const onPaneClick = () => {
 
 const getSelectedEdge = computed(() => edges.value.find((e) => e.id === selectedEdgeId.value) || null)
 
+// Every node currently selected on the canvas, whether picked by a single
+// click or by a box/shift selection
+const selectedNodeIds = computed(() => nodes.value.filter((n) => n.selected).map((n) => n.id))
+
+// A box selection leaves selectedNodeId empty (there is no single active node),
+// so the panel has to key off the selection as a whole
+const hasNodeSelection = computed(() => selectedNodeIds.value.length > 0 || !!selectedNodeId.value)
+
+const duplicateButtonLabel = computed(() => {
+  const count = selectedNodeIds.value.length
+  return count > 1 ? `Duplicate ${count} Nodes` : 'Duplicate Node'
+})
+
 const getEdgeDirectionLabel = computed(() => {
   const edge = getSelectedEdge.value
   if (!edge) return ''
@@ -455,15 +472,11 @@ const duplicateNodes = (ids) => {
   selectedNodeId.value = clonedNodes.length === 1 ? clonedNodes[0].id : null
 }
 
-const duplicateNode = (id) => {
-  duplicateNodes([id])
-}
-
-// Resolves what Ctrl+D should act on: the box/shift selection first, then the
-// active node, then whatever was clicked most recently
+// Resolves what Ctrl+D and the sidebar Duplicate button act on: the
+// box/shift selection first, then the active node, then whatever was clicked
+// most recently
 const duplicateSelectedNodes = () => {
-  const multiSelected = nodes.value.filter((node) => node.selected).map((node) => node.id)
-  if (multiSelected.length > 0) return duplicateNodes(multiSelected)
+  if (selectedNodeIds.value.length > 0) return duplicateNodes(selectedNodeIds.value)
   if (selectedNodeId.value) return duplicateNodes([selectedNodeId.value])
   if (lastClickedNodeId.value) return duplicateNodes([lastClickedNodeId.value])
 }
