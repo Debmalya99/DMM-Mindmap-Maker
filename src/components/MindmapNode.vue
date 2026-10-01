@@ -1,5 +1,5 @@
 <template>
-  <div class="custom-mindmap-node" :style="{ backgroundColor: data.bgColor || '#ffffff' }">
+  <div class="custom-mindmap-node" :style="{ backgroundColor: data.bgColor || '#fffff0' }">
     <!-- Built-in Vue Flow Node Resizer with bottom-right handle -->
     <NodeResizer :min-width="140" :min-height="140" />
 
@@ -94,7 +94,7 @@ const onDelete = () => {
 <style>
 .custom-mindmap-node {
   border: 2px solid #42b883;
-  border-radius: 8px;
+  border-radius: 20px;
   padding: 12px;
   width: 100%;
   height: 100%;
@@ -132,15 +132,30 @@ const onDelete = () => {
 
 .rendered-content {
   font-size: 0.95rem;
-  color: #333;
+  color: #2c3e50;
   word-break: break-word;
   overflow-wrap: break-word;
   height: 100%;
+  line-height: 1.5;
 }
 
 .rendered-content p {
   margin-bottom: 0.5rem;
 }
+
+.rendered-content h1,
+.rendered-content h2,
+.rendered-content h3,
+.rendered-content h4 {
+  font-weight: 600;
+  margin-top: 0.5rem;
+  margin-bottom: 0.3rem;
+  color: #1a252f;
+}
+
+.rendered-content h1 { font-size: 1.3rem; }
+.rendered-content h2 { font-size: 1.2rem; }
+.rendered-content h3 { font-size: 1.1rem; }
 
 .rendered-content ul,
 .rendered-content ol {
@@ -150,6 +165,64 @@ const onDelete = () => {
 
 .rendered-content li {
   margin-bottom: 0.2rem;
+}
+
+/* Tables */
+.rendered-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+  background: white;
+}
+
+.rendered-content th,
+.rendered-content td {
+  border: 1px solid #d0d7de;
+  padding: 4px 8px;
+  text-align: left;
+}
+
+.rendered-content th {
+  background-color: #f6f8fa;
+  font-weight: 600;
+}
+
+/* Code blocks & inline code */
+.rendered-content code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.85em;
+  background: rgba(0, 0, 0, 0.06);
+  padding: 0.15em 0.3em;
+  border-radius: 4px;
+}
+
+.rendered-content pre {
+  background: #f6f8fa;
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  padding: 8px;
+  overflow-x: auto;
+  margin-bottom: 0.5rem;
+}
+
+.rendered-content pre code {
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  font-size: 0.85rem;
+  color: #24292e;
+}
+
+/* Blockquotes */
+.rendered-content blockquote {
+  border-left: 3px solid #42b883;
+  margin: 0 0 0.5rem 0;
+  padding-left: 8px;
+  color: #57606a;
+  background: rgba(66, 184, 131, 0.05);
+  font-style: italic;
+  border-radius: 0 4px 4px 0;
 }
 
 .delete-btn {
@@ -183,7 +256,7 @@ const onDelete = () => {
 }
 
 .handle:hover {
-  transform: scale(1.5);
+  transform: scale(5.0);
   background: #3aa876;
 }
 

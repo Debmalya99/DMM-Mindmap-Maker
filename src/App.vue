@@ -52,7 +52,8 @@
           
 
           <div class="help-text">
-            <small>💡 Drag from any pin (top, bottom, left, right) to another pin to create precise solid Bezier connections. Click a node to edit markdown/LaTeX or change its color.
+            <small>💡 Drag from any pin (top, bottom, left, right) to another pin to create precise solid connections. Click a node to edit markdown/LaTeX or change its color.
+            Shift-LeftClick & Drag to select multiple nodes.
             </small>
           </div>
         </div>
@@ -101,7 +102,7 @@ const isConnecting = ref(false)
 const selectedNodeId = ref(null)
 const selectedEdgeId = ref(null)
 
-const colors = ['#ffffff', '#8bbd88', '#e07163', '#6a8aeb', '#e6eb6a']
+const colors = ['#fffff0', '#8bbd88', '#e07163', '#6a8aeb', '#e6eb6a']
 
 // 4 connection direction modes, cycled by the "Switch Connector Direction" button
 const DIRECTION_MODES = ['none', 'forward', 'backward', 'both']
@@ -140,21 +141,21 @@ let initialNodes = [
     type: 'mindmap',
     position: { x: 250, y: 150 },
     style: { width: '160px', height: '160px' },
-    data: { label: 'Central Idea', bgColor: '#ffffff' },
+    data: { label: 'Central Idea', bgColor: '#fffff0' },
   },
   {
     id: '2',
     type: 'mindmap',
     position: { x: 450, y: 300 },
     style: { width: '160px', height: '160px' },
-    data: { label: 'Explanation 1', bgColor: '#ffffff' },
+    data: { label: 'Explanation 1', bgColor: '#fffff0' },
   },
   {
     id: '3',
     type: 'mindmap',
     position: { x: 50, y: 300 },
     style: { width: '160px', height: '160px' },
-    data: { label: 'Explanation 2', bgColor: '#ffffff' },
+    data: { label: 'Explanation 2', bgColor: '#fffff0' },
   },
 ]
 let initialEdges = [
@@ -280,7 +281,7 @@ const toggleEdgeStyle = () => {
 
 const getNodeColor = (id) => {
   const node = nodes.value.find((n) => n.id === id)
-  return node?.data?.bgColor || '#ffffff'
+  return node?.data?.bgColor || '#fffff0'
 }
 
 const updateNodeColor = (color) => {
@@ -315,7 +316,7 @@ const addNode = () => {
     type: 'mindmap',
     position,
     style: { width: '160px', height: '160px' },
-    data: { label: `Node ${nodes.value.length + 1}`, bgColor: '#ffffff' },
+    data: { label: `Node ${nodes.value.length + 1}`, bgColor: '#fffff0' },
   })
 
   selectedNodeId.value = newId
@@ -406,6 +407,14 @@ onMounted(() => {
         deleteSelectedEdge()
         return
       }
+
+      const selectedNodes = nodes.value.filter((n) => n.selected)
+      if (selectedNodes.length > 0 && !isNodeEditor) {
+        e.preventDefault()
+        selectedNodes.forEach((n) => deleteNode(n.id))
+        return
+      }
+
       if (selectedNodeId.value && !isNodeEditor) {
         e.preventDefault()
         deleteNode(selectedNodeId.value)
@@ -654,5 +663,20 @@ body {
 .vue-flow-canvas {
   width: 100%;
   height: 100%;
+}
+
+/* Remove Vue Flow selection outline and resizer border */
+.vue-flow__node.selected {
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.vue-flow__node-resizer {
+  border-color: transparent !important;
+}
+
+.vue-flow__node-resizer line {
+  stroke: transparent !important;
 }
 </style>
