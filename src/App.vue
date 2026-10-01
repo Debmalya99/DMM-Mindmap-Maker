@@ -8,7 +8,15 @@
             ☰
           </button>
           <div class="header-titles" v-if="!isToolbarCollapsed">
-            <h2>Toolbar</h2>
+            <div class="title-row">
+              <h2>Toolbar</h2>
+              <div class="help-tooltip-container">
+                <span class="help-icon" title="Help & Tips">💡</span>
+                <div class="help-popover">
+                  <small>Drag from any pin (top, bottom, left, right) to another pin to create precise solid connections. Click a node to edit markdown/LaTeX or change its color. Shift-LeftClick & Drag to select multiple nodes.</small>
+                </div>
+              </div>
+            </div>
             <div class="current-file-name">{{ currentFileName }}</div>
           </div>
         </div>
@@ -51,13 +59,6 @@
             />
             <button @click="toggleEdgeStyle" class="btn secondary">Toggle Style</button>
             <button @click="deleteSelectedEdge" class="btn danger">Remove Connector</button>  
-          </div>
-          
-
-          <div class="help-text">
-            <small>💡 Drag from any pin (top, bottom, left, right) to another pin to create precise solid connections. Click a node to edit markdown/LaTeX or change its color.
-            Shift-LeftClick & Drag to select multiple nodes.
-            </small>
           </div>
         </div>
 
@@ -517,8 +518,8 @@ onMounted(() => {
     const isInInput = target instanceof HTMLElement && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)
     const isNodeEditor = target instanceof HTMLElement && target.closest('.custom-mindmap-node') !== null
 
-    // Delete / Backspace
-    if (e.key === 'Delete' || e.key === 'Backspace') {
+    // Delete key binding
+    if (e.key === 'Delete') {
       if (isInInput && !isNodeEditor) return
 
       if (selectedEdgeId.value) {
@@ -764,15 +765,53 @@ body {
   fill: #2c3e50;
 }
 
-.help-text {
-  margin-top: 1rem;
-  font-size: 0.8rem;
-  color: #888;
-  line-height: 1.4;
-  background: #f9fbfb;
+.title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.help-tooltip-container {
+  position: relative;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+
+.help-icon {
+  font-size: 1.1rem;
+  padding: 2px 6px;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+
+.help-icon:hover {
+  background: #f0f2f5;
+}
+
+.help-popover {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  left: 30px;
+  top: 0;
+  width: 240px;
+  background: white;
+  color: #333;
   padding: 0.8rem;
   border-radius: 6px;
-  border: 1px solid #eee;
+  border: 1px solid #d0d7de;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 100;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.help-tooltip-container:hover .help-popover {
+  visibility: visible;
+  opacity: 1;
 }
 
 .toolbar-actions {
