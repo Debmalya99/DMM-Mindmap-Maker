@@ -46,17 +46,29 @@
                   :title="color"
                 ></button>
               </div>
-              <div class="custom-color-picker-row">
-                <label for="custom-node-color">Custom Color:</label>
-                <input
-                  id="custom-node-color"
-                  type="color"
-                  class="color-picker-input"
-                  :value="getNodeColor(selectedNodeId)"
-                  @input="(e) => updateNodeColor(e.target.value)"
-                />
-              </div>
-            </template>
+               <div class="custom-color-picker-row">
+                 <label for="custom-node-color">Custom Color:</label>
+                 <input
+                   id="custom-node-color"
+                   type="color"
+                   class="color-picker-input"
+                   :value="getNodeColor(selectedNodeId)"
+                   @input="(e) => updateNodeColor(e.target.value)"
+                 />
+               </div>
+
+               <div class="zindex-picker-row">
+                 <label for="node-zindex">Z-Index:</label>
+                 <input
+                   id="node-zindex"
+                   type="number"
+                   step="1"
+                   class="zindex-input"
+                   :value="getNodeZIndex(selectedNodeId)"
+                   @input="(e) => updateNodeZIndex(Number(e.target.value))"
+                 />
+               </div>
+             </template>
           </div>
 
           <!-- Connector Direction (Shows up when a connector is selected) -->
@@ -96,6 +108,7 @@
           v-model:edges="edges"
           :node-types="nodeTypes"
           :connection-mode="ConnectionMode.Loose"
+          :auto-bring-nodes-to-front="false"
           @connect="onConnect"
           @connect-start="onConnectStart"
           @connect-end="onConnectEnd"
@@ -367,6 +380,24 @@ const updateNodeColor = (color) => {
   }
 }
 
+const getNodeZIndex = (id) => {
+  const node = nodes.value.find((n) => n.id === id)
+  return node?.zIndex ?? node?.data?.zIndex ?? 0
+}
+
+const updateNodeZIndex = (zIndex) => {
+  if (!selectedNodeId.value) return
+  const node = nodes.value.find((n) => n.id === selectedNodeId.value)
+  if (node) {
+    const value = Number.isFinite(zIndex) ? Math.floor(zIndex) : 0
+    node.zIndex = value
+    if (!node.data) node.data = {}
+    node.data.zIndex = value
+    if (!node.style) node.style = {}
+    node.style.zIndex = value
+  }
+}
+
 const addNode = () => {
   const newId = String(Date.now())
 
@@ -389,8 +420,9 @@ const addNode = () => {
     id: newId,
     type: 'mindmap',
     position,
-    style: { width: '160px', height: '160px' },
-    data: { label: `Node ${nodes.value.length + 1}`, bgColor: '#fffff0' },
+    style: { width: '160px', height: '160px', zIndex: 0 },
+    zIndex: 0,
+    data: { label: `Node ${nodes.value.length + 1}`, bgColor: '#fffff0', zIndex: 0 },
   })
 
   selectedNodeId.value = newId
@@ -434,8 +466,9 @@ const duplicateNodes = (ids) => {
         x: rawNode.position.x + DUPLICATE_OFFSET,
         y: rawNode.position.y + DUPLICATE_OFFSET,
       },
-      data: rawNode.data ? { ...rawNode.data } : {},
-      style: rawNode.style ? { ...rawNode.style } : {},
+      zIndex: rawNode.data?.zIndex ?? rawNode.zIndex ?? 0,
+      data: rawNode.data ? { ...rawNode.data, zIndex: rawNode.data?.zIndex ?? rawNode.zIndex ?? 0 } : { zIndex: 0 },
+      style: rawNode.style ? { ...rawNode.style, zIndex: rawNode.data?.zIndex ?? rawNode.zIndex ?? rawNode.style?.zIndex ?? 0 } : { zIndex: rawNode.data?.zIndex ?? rawNode.zIndex ?? 0 },
     })
   })
 
@@ -572,7 +605,17 @@ const loadMindmap = async () => {
     const parsed = JSON.parse(content)
 
     if (parsed.nodes) {
-      nodes.value = parsed.nodes
+      nodes.value = parsed.nodes.map((n) => {
+        const z = Number.isFinite(n.zIndex) ? Math.floor(n.zIndex) : (Number.isFinite(n.data?.zIndex) ? Math.floor(n.data.zIndex) : 0)
+        const style = n.style ? { ...n.style } : {}
+        style.zIndex = z
+        return {
+          ...n,
+          zIndex: z,
+          data: n.data ? { ...n.data, zIndex: z } : { zIndex: z },
+          style,
+        }
+      })
     }
     if (parsed.edges) {
       edges.value = parsed.edges.map((e) => ({
@@ -1080,8 +1123,29 @@ body {
   padding: 0;
 }
 
-.color-picker-input::-webkit-color-swatch {
-  border: 1px solid #ccc;
+.zindex-picker-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: #2c3e50;
+}
+
+.zindex-input {
+  width: 60px;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.85rem;
+  font-family: inherit;
+  color: #2c3e50;
+  background: white;
+  border: 1px solid #d0d0d0;
   border-radius: 4px;
+  text-align: right;
+}
+
+.zindex-input:focus {
+  outline: none;
+  border-color: #2c3e50;
 }
 </style>
