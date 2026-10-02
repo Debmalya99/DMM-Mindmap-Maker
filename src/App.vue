@@ -15,15 +15,20 @@
           <div class="header-titles" v-if="!isToolbarCollapsed">
             <div class="title-row">
               <h3 class="current-file-name" :title="currentFileName">{{ currentFileName }}</h3>
-              <div class="help-tooltip-container">
-                <span class="help-icon" title="Help & Tips">💡</span>
-                <div class="help-popover">
-                  <small>Drag from any pin (top, bottom, left, right) to another pin to create precise solid connections. Click a node to edit markdown/LaTeX or change its color. Shift-LeftClick & Drag to select multiple nodes.</small>
-                  <div class="help-shortcuts">
-                    <small><strong>Ctrl+A</strong> add node &middot; <strong>Ctrl+D</strong> duplicate &middot; <strong>Ctrl+S</strong> save &middot; <strong>Ctrl+O</strong> open &middot; <strong>D</strong> edge direction &middot; <strong>S</strong> edge style</small>
-                  </div>
+              <HelpPopover>
+                <small>Drag from any pin (top, bottom, left, right) to another pin to create precise solid connections. Click a node to edit markdown/LaTeX or change its color. Shift-LeftClick & Drag to select multiple nodes.</small>
+                <div class="help-shortcuts">
+                  <small><strong>Ctrl+A</strong> add node &middot; <strong>Ctrl+D</strong> duplicate &middot; <strong>Ctrl+S</strong> save &middot; <strong>Ctrl+O</strong> open &middot; <strong>D</strong> edge direction &middot; <strong>S</strong> edge style</small>
                 </div>
-              </div>
+              </HelpPopover>
+              
+              <HelpPopover icon="🛈">
+                <small>Mindmap Information</small>
+                <hr>
+                <span>Nodes: {{ nodes.length }}</span> | <span>Connections: {{ edges.length }}</span>
+                <hr>
+                <span><strong>Current File Name:</strong> {{ currentFileName }}</span>
+              </HelpPopover>
             </div>
           </div>
         </div>
@@ -101,9 +106,9 @@
           <button @click="loadMindmap" class="btn action-btn">Load</button>
         </div>
 
-        <div class="toolbar-footer" v-if="!isToolbarCollapsed">
+        <!-- <div class="toolbar-footer" v-if="!isToolbarCollapsed">
           <span>Nodes: {{ nodes.length }}</span> | <span>Connections: {{ edges.length }}</span>
-        </div>
+        </div> -->
       </aside>
 
       <section class="canvas-area">
@@ -137,6 +142,7 @@ import { Background } from '@vue-flow/background'
 import { Controls } from '@vue-flow/controls'
 import MindmapNode from './components/MindmapNode.vue'
 import TopNavBar from './components/TopNavBar.vue'
+import HelpPopover from './components/HelpPopover.vue'
 
 // Import Vue Flow styles required for UI rendering
 import '@vue-flow/core/dist/style.css'
