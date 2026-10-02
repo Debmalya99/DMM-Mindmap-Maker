@@ -90,6 +90,7 @@
       </aside>
 
       <section class="canvas-area">
+        <TopNavBar />
         <VueFlow
           v-model:nodes="nodes"
           v-model:edges="edges"
@@ -117,6 +118,7 @@ import { VueFlow, useVueFlow, ConnectionMode, MarkerType } from '@vue-flow/core'
 import { Background } from '@vue-flow/background'
 import { Controls } from '@vue-flow/controls'
 import MindmapNode from './components/MindmapNode.vue'
+import TopNavBar from './components/TopNavBar.vue'
 
 // Import Vue Flow styles required for UI rendering
 import '@vue-flow/core/dist/style.css'
