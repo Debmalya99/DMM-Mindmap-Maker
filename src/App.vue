@@ -1,5 +1,10 @@
 <template>
   <div class="mindmap-container">
+    <div class="save-indicator" :class="{ visible: saveStatus }">
+      <span class="spinner" v-if="saveStatus === 'saving'"></span>
+      <span class="save-icon" v-else-if="saveStatus === 'saved'">✓</span>
+      <span>{{ saveStatus === 'saving' ? 'Saving mindmap...' : 'Saved successfully!' }}</span>
+    </div>
     <main class="main-content">
       <!-- Collapsible Sidebar / Toolbar -->
       <aside class="sidebar" :class="{ collapsed: isToolbarCollapsed }">
@@ -143,6 +148,8 @@ const isConnecting = ref(false)
 const selectedNodeId = ref(null)
 const selectedEdgeId = ref(null)
 const currentFileHandle = ref(null)
+const saveStatus = ref('') // '' | 'saving' | 'saved'
+let saveTimer = null
 
 // Remembers the last node the user clicked, so Ctrl+D still has a target
 // after the selection has been cleared
@@ -533,21 +540,26 @@ const deleteSelectedEdge = () => {
   selectedEdgeId.value = null
 }
 
-const saveAsMindmap = async () => {
+const executeSave = async (isSaveAs = false) => {
   if (!window.showSaveFilePicker) {
     alert('File System Access API is not supported in this browser.')
     return
   }
+  saveStatus.value = 'saving'
+  if (saveTimer) clearTimeout(saveTimer)
   try {
-    const handle = await window.showSaveFilePicker({
-      types: [
-        {
-          description: 'Mindmap Files (.dmm.json)',
-          accept: { 'application/json': ['.dmm.json'] },
-        },
-      ],
-    })
-    currentFileHandle.value = handle
+    let handle = currentFileHandle.value
+    if (isSaveAs || !handle) {
+      handle = await window.showSaveFilePicker({
+        types: [
+          {
+            description: 'Mindmap Files (.dmm.json)',
+            accept: { 'application/json': ['.dmm.json'] },
+          },
+        ],
+      })
+      currentFileHandle.value = handle
+    }
     const writable = await handle.createWritable()
     const state = {
       nodes: toRaw(nodes.value),
@@ -555,34 +567,22 @@ const saveAsMindmap = async () => {
     }
     await writable.write(JSON.stringify(state, null, 2))
     await writable.close()
+    saveStatus.value = 'saved'
+    saveTimer = setTimeout(() => {
+      saveStatus.value = ''
+    }, 2000)
   } catch (err) {
+    saveStatus.value = ''
     if (err.name !== 'AbortError') {
-      console.error('Failed to save as mindmap:', err)
+      console.error('Failed to save mindmap:', err)
       alert('Failed to save mindmap file.')
     }
   }
 }
 
-const saveMindmap = async () => {
-  if (!currentFileHandle.value) {
-    await saveAsMindmap()
-    return
-  }
-  try {
-    const writable = await currentFileHandle.value.createWritable()
-    const state = {
-      nodes: toRaw(nodes.value),
-      edges: toRaw(edges.value),
-    }
-    await writable.write(JSON.stringify(state, null, 2))
-    await writable.close()
-  } catch (err) {
-    if (err.name !== 'AbortError') {
-      console.error('Failed to save mindmap in place:', err)
-      await saveAsMindmap()
-    }
-  }
-}
+const saveAsMindmap = () => executeSave(true)
+
+const saveMindmap = () => executeSave(false)
 
 const loadMindmap = async () => {
   if (!window.showOpenFilePicker) {
@@ -1147,5 +1147,50 @@ body {
 .zindex-input:focus {
   outline: none;
   border-color: #2c3e50;
+}
+
+.save-indicator {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+  background: rgba(33, 37, 41, 0.9);
+  color: white;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s ease;
+  pointer-events: none;
+}
+
+.save-indicator.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.save-indicator .spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #42b883;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.save-indicator .save-icon {
+  color: #42b883;
+  font-weight: bold;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 </style>
