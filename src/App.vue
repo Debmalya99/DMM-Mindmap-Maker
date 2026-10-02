@@ -15,7 +15,7 @@
                 <div class="help-popover">
                   <small>Drag from any pin (top, bottom, left, right) to another pin to create precise solid connections. Click a node to edit markdown/LaTeX or change its color. Shift-LeftClick & Drag to select multiple nodes.</small>
                   <div class="help-shortcuts">
-                    <small><strong>Ctrl+A</strong> add node &middot; <strong>Ctrl+D</strong> duplicate &middot; <strong>Ctrl+S</strong> save &middot; <strong>Ctrl+O</strong> open</small>
+                    <small><strong>Ctrl+A</strong> add node &middot; <strong>Ctrl+D</strong> duplicate &middot; <strong>Ctrl+S</strong> save &middot; <strong>Ctrl+O</strong> open &middot; <strong>D</strong> edge direction &middot; <strong>S</strong> edge style</small>
                   </div>
                 </div>
               </div>
@@ -652,6 +652,21 @@ onMounted(() => {
       }
 
       return
+    }
+
+    // Single key shortcuts when not typing in inputs
+    if (!isInInput) {
+      const lowerKey = e.key.toLowerCase()
+      if (lowerKey === 'd' && selectedEdgeId.value) {
+        e.preventDefault()
+        switchEdgeDirection()
+        return
+      }
+      if (lowerKey === 's' && selectedEdgeId.value) {
+        e.preventDefault()
+        toggleEdgeStyle()
+        return
+      }
     }
 
     // Delete key binding
