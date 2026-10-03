@@ -18,7 +18,8 @@
               <HelpPopover>
                 <small>Drag from any pin (top, bottom, left, right) to another pin to create precise solid connections. Click a node to edit markdown/LaTeX or change its color. Shift-LeftClick & Drag to select multiple nodes.</small>
                 <div class="help-shortcuts">
-                  <small><strong>Ctrl+A</strong> add node &middot; <strong>Ctrl+D</strong> duplicate &middot; <strong>Ctrl+S</strong> save &middot; <strong>Ctrl+O</strong> open &middot; <strong>D</strong> edge direction &middot; <strong>S</strong> edge style &middot; <strong>Esc</strong> deselect current node</small>
+                  <small><strong>Ctrl+A</strong> add node &middot; <strong>Ctrl+D</strong> duplicate &middot; <strong>Ctrl+S</strong> save &middot; <strong>Ctrl+O</strong> open &middot; <strong>D</strong> edge direction &middot; <strong>S</strong> edge style &middot; <strong>Esc</strong> deselect current node &middot; <strong>T</strong> Toggle this toolbar
+                  </small>
                 </div>
               </HelpPopover>
               
@@ -757,6 +758,13 @@ onMounted(() => {
         deleteNode(selectedNodeId.value)
         return
       }
+    }
+
+    // Feature/toggle-toolbar: Added the hotkey 'T' for toggling the toolbar
+    if(e.key === 't' || e.key === 'T')
+    {
+      e.preventDefault()
+      toggleToolbar()
     }
   })
 })
