@@ -3,8 +3,6 @@ node_modules/
 
 # Build outputs & bundled assets
 dist/
-resources.neu
-resources/js/neutralino.js
 .vite/
 
 # Editor / OS specific
@@ -14,6 +12,6 @@ Thumbs.db
 .env
 .env.local
 
-# Temporary files.
+# Temporary files
 .tmp/
 session_details.txt

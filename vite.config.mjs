@@ -9,7 +9,7 @@ export default defineConfig({
     strictPort: true,
   },
   build: {
-    outDir: 'resources',
+    outDir: 'dist',
     emptyOutDir: true,
   },
 })
