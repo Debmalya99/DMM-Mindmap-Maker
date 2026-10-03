@@ -11,3 +11,8 @@ Thumbs.db
 *.log
 .env
 .env.local
+
+# Temporary files
+.tmp/
+session_details.txt
+
