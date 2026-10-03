@@ -761,10 +761,11 @@ onMounted(() => {
     }
 
     // Feature/toggle-toolbar: Added the hotkey 'T' for toggling the toolbar
-    if(e.key === 't' || e.key === 'T')
-    {
+    if (e.key === 't' || e.key === 'T') {
+      if (isInInput) return
       e.preventDefault()
       toggleToolbar()
+      return
     }
   })
 })
