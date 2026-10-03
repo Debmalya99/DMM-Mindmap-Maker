@@ -18,7 +18,7 @@
               <HelpPopover>
                 <small>Drag from any pin (top, bottom, left, right) to another pin to create precise solid connections. Click a node to edit markdown/LaTeX or change its color. Shift-LeftClick & Drag to select multiple nodes.</small>
                 <div class="help-shortcuts">
-                  <small><strong>Ctrl+A</strong> add node &middot; <strong>Ctrl+D</strong> duplicate &middot; <strong>Ctrl+S</strong> save &middot; <strong>Ctrl+O</strong> open &middot; <strong>D</strong> edge direction &middot; <strong>S</strong> edge style &middot; <strong>Esc</strong> deselect</small>
+                  <small><strong>Ctrl+A</strong> add node &middot; <strong>Ctrl+D</strong> duplicate &middot; <strong>Ctrl+S</strong> save &middot; <strong>Ctrl+O</strong> open &middot; <strong>D</strong> edge direction &middot; <strong>S</strong> edge style &middot; <strong>Esc</strong> deselect current node</small>
                 </div>
               </HelpPopover>
               
@@ -137,7 +137,7 @@
 
 <script setup>
 import { ref, computed, watch, watchEffect, onMounted, markRaw, toRaw } from 'vue'
-import { VueFlow, useVueFlow, ConnectionMode, MarkerType } from '@vue-flow/core'
+import { VueFlow, useVueFlow, ConnectionMode, MarkerType, isNode } from '@vue-flow/core'
 import { Background } from '@vue-flow/background'
 import { Controls } from '@vue-flow/controls'
 import MindmapNode from './components/MindmapNode.vue'
@@ -722,8 +722,13 @@ onMounted(() => {
 
     // Escape key: deselect nodes and edges
     if (e.key === 'Escape') {
-      if (isInInput && !isNodeEditor) return
       e.preventDefault()
+
+      if (isNodeEditor && target instanceof HTMLElement)
+      {
+        target.blur()
+      }
+
       selectedNodeId.value = null
       selectedEdgeId.value = null
       nodes.value.forEach((n) => (n.selected = false))
