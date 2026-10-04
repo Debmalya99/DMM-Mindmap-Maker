@@ -1012,6 +1012,12 @@ body {
   fill: #2c3e50;
 }
 
+/* Unscoped, global style block */
+.vue-flow__edge.selected .vue-flow__edge-path {
+  stroke: #0caded !important; /* Or any color you prefer */
+  stroke-width: 3 !important; /* Optional: make it slightly thicker too */
+}
+
 .title-row {
   display: flex;
   align-items: center;
