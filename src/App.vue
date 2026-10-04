@@ -1110,9 +1110,17 @@ body {
   height: 100%;
 }
 
+.vue-flow__node{
+  border: 2px dashed transparent;
+  transition: border-color 0.3s ease;
+}
+
 /* Remove Vue Flow selection outline and resizer border */
 .vue-flow__node.selected {
-  border: none !important;
+  /*border: none !important;*/
+  border: 2px dashed blue;
+
+  border-radius: 20px;
   box-shadow: none !important;
   outline: none !important;
 }

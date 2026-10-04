@@ -106,6 +106,7 @@ const onDelete = () => {
   transition: background-color 0.2s;
 }
 
+
 .node-content {
   display: flex;
   flex-direction: column;
