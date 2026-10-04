@@ -48,6 +48,7 @@
             @duplicate="duplicateSelectedNodes"
             @update-color="updateNodeColor"
             @update-zindex="updateNodeZIndex"
+            @lock-movement="lockNodePosition"
           />
 
           <!-- Connector Direction (Shows up when a connector is selected) -->
@@ -114,6 +115,7 @@
             @duplicate="duplicateSelectedNodes"
             @update-color="updateNodeColor"
             @update-zindex="updateNodeZIndex"
+            @lock-movement="lockNodePosition"
           />
 
           <ConnectorOptionsPanel
@@ -462,6 +464,20 @@ const updateNodeColor = (color) => {
   if (node) {
     if (!node.data) node.data = {}
     node.data.bgColor = color
+  }
+}
+
+// Feature/node-movement-lock
+const lockNodePosition = () => {
+  if (!selectedNodeId.value) return
+  const node = nodes.value.find((n) => n.id === selectedNodeId.value)
+  if (node) {
+    // if (!node.draggable) {node.draggable = false; return}
+    // console.log('here')
+
+    // At the beginning, the draggable will be undefined so that will be treated as false.
+    node.draggable = node.draggable === false
+    
   }
 }
 

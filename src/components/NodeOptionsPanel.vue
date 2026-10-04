@@ -2,6 +2,11 @@
   <div class="color-palette-section">
     <h3>Node Options</h3>
     <button @click="$emit('duplicate')" class="btn secondary">{{ duplicateButtonLabel }}</button>
+    <!-- Feature/node-movement-lock -->
+    <button v-if="selectedNodeId"
+    @click="$emit('lock-movement')" class="btn secondary"
+    title="Lock/Unlock a Node's Position"
+    >Toggle Position Lock</button>
 
     <!-- Colour is per-node, so it needs a single active node -->
     <template v-if="selectedNodeId">
@@ -68,7 +73,7 @@ const props = defineProps({
   },
 })
 
-defineEmits(['duplicate', 'update-color', 'update-zindex'])
+defineEmits(['lock-movement','duplicate', 'update-color', 'update-zindex'])
 
 // The sidebar and the context menu can render this panel at the same time,
 // so the labels need ids that do not collide
