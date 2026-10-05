@@ -6,7 +6,7 @@
     <button v-if="selectedNodeId"
     @click="$emit('lock-movement')" class="btn secondary"
     title="Lock/Unlock a Node's Position"
-    >Toggle Position Lock</button>
+    >{{toggleNodeLockLabel}}</button>
 
     <!-- Colour is per-node, so it needs a single active node -->
     <template v-if="selectedNodeId">
@@ -95,6 +95,13 @@ const getNodeZIndex = (id) => {
   const node = props.nodes.find((n) => n.id === id)
   return node?.zIndex ?? node?.data?.zIndex ?? 0
 }
+
+// Feature/node-movement-lock: Does not work for now
+const toggleNodeLockLabel = computed(() => {
+  const node = props.nodes.find((n) => n.id === props.selectedNodeId)
+  // undefined (fresh node) → treat as unlocked → "Lock"
+  return node?.draggable === false ? 'Unlock Node Position' : 'Lock Node Position'
+})
 </script>
 
 <style>
