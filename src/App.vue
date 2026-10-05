@@ -83,6 +83,7 @@
           :connection-mode="ConnectionMode.Loose"
           :auto-bring-nodes-to-front="false"
           :min-zoom="0.2"
+          :pan-activation-key-code="null"
           @connect="onConnect"
           @connect-start="onConnectStart"
           @connect-end="onConnectEnd"
