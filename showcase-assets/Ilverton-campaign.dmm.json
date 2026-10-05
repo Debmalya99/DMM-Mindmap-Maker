@@ -1,0 +1,1417 @@
+{
+  "nodes": [
+    {
+      "id": "1791049465327",
+      "type": "mindmap",
+      "dimensions": {
+        "width": 323,
+        "height": 285
+      },
+      "computedPosition": {
+        "x": -41.21595087352756,
+        "y": 8.107726049819718,
+        "z": 0
+      },
+      "handleBounds": {
+        "source": [
+          {
+            "id": "top",
+            "type": "source",
+            "nodeId": "1791049465327",
+            "position": "top",
+            "x": 158.49995698036892,
+            "y": -2.7999979129175863,
+            "width": 6,
+            "height": 6
+          },
+          {
+            "id": "bottom",
+            "type": "source",
+            "nodeId": "1791049465327",
+            "position": "bottom",
+            "x": 158.49995698036892,
+            "y": 281.7998752523135,
+            "width": 6,
+            "height": 6
+          },
+          {
+            "id": "left",
+            "type": "source",
+            "nodeId": "1791049465327",
+            "position": "left",
+            "x": -2.7999920968550365,
+            "y": 139.49994787846367,
+            "width": 6,
+            "height": 6
+          },
+          {
+            "id": "right",
+            "type": "source",
+            "nodeId": "1791049465327",
+            "position": "right",
+            "x": 319.7998750385926,
+            "y": 139.49994787846367,
+            "width": 6,
+            "height": 6
+          }
+        ],
+        "target": null
+      },
+      "selected": false,
+      "dragging": false,
+      "resizing": false,
+      "initialized": false,
+      "isParent": false,
+      "position": {
+        "x": -41.21595087352756,
+        "y": 8.107726049819718
+      },
+      "data": {
+        "label": "Central Town\n-----\n\nThis is about the town of **Ilverton**. There's a baker who bakes fresh bread, plus there's a tavern that mostly serves beer and some strange smelling fish soup. \n\nAnd yeah there's not much of a place of worship just some dude who shouts at the town square every morning.",
+        "bgColor": "#8bbd88",
+        "zIndex": 0
+      },
+      "events": {},
+      "style": {
+        "width": "323px",
+        "height": "285px",
+        "zIndex": 0
+      },
+      "zIndex": 0
+    },
+    {
+      "id": "05053c0e-f636-44f1-b46b-baefc38567d2",
+      "type": "mindmap",
+      "dimensions": {
+        "width": 273,
+        "height": 209
+      },
+      "computedPosition": {
+        "x": 1465.166193588434,
+        "y": -70.58019230839989,
+        "z": 0
+      },
+      "handleBounds": {
+        "source": [
+          {
+            "id": "top",
+            "type": "source",
+            "nodeId": "05053c0e-f636-44f1-b46b-baefc38567d2",
+            "position": "top",
+            "x": 133.50006964137788,
+            "y": -2.7999959742300695,
+            "width": 6,
+            "height": 6
+          },
+          {
+            "id": "bottom",
+            "type": "source",
+            "nodeId": "05053c0e-f636-44f1-b46b-baefc38567d2",
+            "position": "bottom",
+            "x": 133.50006964137788,
+            "y": 205.79991930022445,
+            "width": 6,
+            "height": 6
+          },
+          {
+            "id": "left",
+            "type": "source",
+            "nodeId": "05053c0e-f636-44f1-b46b-baefc38567d2",
+            "position": "left",
+            "x": -2.799899039854244,
+            "y": 101.49996554037223,
+            "width": 6,
+            "height": 6
+          },
+          {
+            "id": "right",
+            "type": "source",
+            "nodeId": "05053c0e-f636-44f1-b46b-baefc38567d2",
+            "position": "right",
+            "x": 269.80003832260996,
+            "y": 101.49996554037223,
+            "width": 6,
+            "height": 6
+          }
+        ],
+        "target": null
+      },
+      "selected": false,
+      "dragging": false,
+      "resizing": false,
+      "initialized": false,
+      "isParent": false,
+      "position": {
+        "x": 1465.166193588434,
+        "y": -70.58019230839989
+      },
+      "data": {
+        "label": "Cave\n----\n<p style=\"color:white\">Quite a generic cave truth be told. Inhabited by an old bear who is too aggresive for his age. But hey, at least you get something to hit as its Armor Class is low.</p>",
+        "bgColor": "#be7f27",
+        "zIndex": 0
+      },
+      "events": {},
+      "style": {
+        "width": "273px",
+        "height": "209px",
+        "zIndex": 0
+      },
+      "zIndex": 0
+    },
+    {
+      "id": "2816818d-282b-493a-95a6-5eb4863f44a0",
+      "type": "mindmap",
+      "dimensions": {
+        "width": 528,
+        "height": 317
+      },
+      "computedPosition": {
+        "x": 553.4228773565428,
+        "y": 187.28011118176778,
+        "z": 0
+      },
+      "handleBounds": {
+        "source": [
+          {
+            "id": "top",
+            "type": "source",
+            "nodeId": "2816818d-282b-493a-95a6-5eb4863f44a0",
+            "position": "top",
+            "x": 260.9998859096355,
+            "y": -2.7999920968550365,
+            "width": 6,
+            "height": 6
+          },
+          {
+            "id": "bottom",
+            "type": "source",
+            "nodeId": "2816818d-282b-493a-95a6-5eb4863f44a0",
+            "position": "bottom",
+            "x": 260.9998859096355,
+            "y": 313.79991634597485,
+            "width": 6,
+            "height": 6
+          },
+          {
+            "id": "left",
+            "type": "source",
+            "nodeId": "2816818d-282b-493a-95a6-5eb4863f44a0",
+            "position": "left",
+            "x": -2.800023115855301,
+            "y": 155.49996987931,
+            "width": 6,
+            "height": 6
+          },
+          {
+            "id": "right",
+            "type": "source",
+            "nodeId": "2816818d-282b-493a-95a6-5eb4863f44a0",
+            "position": "right",
+            "x": 524.7997328971258,
+            "y": 155.49996987931,
+            "width": 6,
+            "height": 6
+          }
+        ],
+        "target": null
+      },
+      "selected": false,
+      "dragging": false,
+      "resizing": false,
+      "initialized": false,
+      "isParent": false,
+      "position": {
+        "x": 553.4228773565428,
+        "y": 187.28011118176778
+      },
+      "data": {
+        "label": "The Mystic Forest\n---\nSaid to be inhabited by elves or some other useless folklore. But the point is, this place is full of old magic. Frankly, when you are exploring this place, that is in every way better off not being explored, you better watch your step. Because aside from the wolves and wildboars that inhabit these lands, there's also a lot of tigers its said. And they are some weird sort, with their eyes glowing blue.\n\nPlus, there's the issue that there's a lot of strange bugs that will eat anything organic, so better watch where you are going. Better still, just leave the damn place",
+        "bgColor": "#fffff0",
+        "zIndex": 0
+      },
+      "events": {},
+      "style": {
+        "width": "528px",
+        "height": "317px",
+        "zIndex": 0
+      },
+      "zIndex": 0
+    },
+    {
+      "id": "e5e537c3-cd17-4057-af1e-52bacf668b90",
+      "type": "mindmap",
+      "dimensions": {
+        "width": 160,
+        "height": 160
+      },
+      "computedPosition": {
+        "x": 1466.704056051682,
+        "y": 215.5444229152224,
+        "z": 0
+      },
+      "handleBounds": {
+        "source": [
+          {
+            "id": "top",
+            "type": "source",
+            "nodeId": "e5e537c3-cd17-4057-af1e-52bacf668b90",
+            "position": "top",
+            "x": 76.99995326801496,
+            "y": -2.7999920968550365,
+            "width": 6,
+            "height": 6
+          },
+          {
+            "id": "bottom",
+            "type": "source",
+            "nodeId": "e5e537c3-cd17-4057-af1e-52bacf668b90",
+            "position": "bottom",
+            "x": 76.99995326801496,
+            "y": 156.79994516138535,
+            "width": 6,
+            "height": 6
+          },
+          {
+            "id": "left",
+            "type": "source",
+            "nodeId": "e5e537c3-cd17-4057-af1e-52bacf668b90",
+            "position": "left",
+            "x": -2.799899039854244,
+            "y": 76.9999687775151,
+            "width": 6,
+            "height": 6
+          },
+          {
+            "id": "right",
+            "type": "source",
+            "nodeId": "e5e537c3-cd17-4057-af1e-52bacf668b90",
+            "position": "right",
+            "x": 156.80017780388732,
+            "y": 76.9999687775151,
+            "width": 6,
+            "height": 6
+          }
+        ],
+        "target": null
+      },
+      "selected": false,
+      "dragging": false,
+      "resizing": false,
+      "initialized": false,
+      "isParent": false,
+      "position": {
+        "x": 1466.704056051682,
+        "y": 215.5444229152224
+      },
+      "data": {
+        "label": "Druid Circle",
+        "bgColor": "#fffff0",
+        "zIndex": 0
+      },
+      "events": {},
+      "style": {
+        "width": "160px",
+        "height": "160px",
+        "zIndex": 0
+      },
+      "zIndex": 0
+    },
+    {
+      "id": "5be63ae2-a7b9-4f5d-96d5-73d50921cd51",
+      "type": "mindmap",
+      "dimensions": {
+        "width": 294,
+        "height": 164
+      },
+      "computedPosition": {
+        "x": 599.7840491264724,
+        "y": -403.8922739501802,
+        "z": 0
+      },
+      "handleBounds": {
+        "source": [
+          {
+            "id": "top",
+            "type": "source",
+            "nodeId": "5be63ae2-a7b9-4f5d-96d5-73d50921cd51",
+            "position": "top",
+            "x": 144.00006326883445,
+            "y": -2.7999920968550365,
+            "width": 6,
+            "height": 6
+          },
+          {
+            "id": "bottom",
+            "type": "source",
+            "nodeId": "5be63ae2-a7b9-4f5d-96d5-73d50921cd51",
+            "position": "bottom",
+            "x": 144.00006326883445,
+            "y": 160.79993830246403,
+            "width": 6,
+            "height": 6
+          },
+          {
+            "id": "left",
+            "type": "source",
+            "nodeId": "5be63ae2-a7b9-4f5d-96d5-73d50921cd51",
+            "position": "left",
+            "x": -2.799899039854244,
+            "y": 78.99996534805442,
+            "width": 6,
+            "height": 6
+          },
+          {
+            "id": "right",
+            "type": "source",
+            "nodeId": "5be63ae2-a7b9-4f5d-96d5-73d50921cd51",
+            "position": "right",
+            "x": 290.8000876155237,
+            "y": 78.99996534805442,
+            "width": 6,
+            "height": 6
+          }
+        ],
+        "target": null
+      },
+      "selected": false,
+      "dragging": false,
+      "resizing": false,
+      "initialized": false,
+      "isParent": false,
+      "position": {
+        "x": 599.7840491264724,
+        "y": -403.8922739501802
+      },
+      "data": {
+        "label": "Big Road\n---\nThink of it as a big highway. I mean, I had to keep something that connects a lot of places together without messing stuff up.",
+        "bgColor": "#e6eb6a",
+        "zIndex": 0
+      },
+      "events": {},
+      "style": {
+        "width": "294px",
+        "height": "164px",
+        "zIndex": 0
+      },
+      "zIndex": 0
+    },
+    {
+      "id": "c3e43def-ecd2-4e52-919b-8122a528a62f",
+      "type": "mindmap",
+      "dimensions": {
+        "width": 275,
+        "height": 231
+      },
+      "computedPosition": {
+        "x": 1130.0594235287135,
+        "y": -527.1777877204934,
+        "z": 0
+      },
+      "handleBounds": {
+        "source": [
+          {
+            "id": "top",
+            "type": "source",
+            "nodeId": "c3e43def-ecd2-4e52-919b-8122a528a62f",
+            "position": "top",
+            "x": 134.49999813389695,
+            "y": -2.7999920968550365,
+            "width": 6,
+            "height": 6
+          },
+          {
+            "id": "bottom",
+            "type": "source",
+            "nodeId": "c3e43def-ecd2-4e52-919b-8122a528a62f",
+            "position": "bottom",
+            "x": 134.49999813389695,
+            "y": 227.7999397367826,
+            "width": 6,
+            "height": 6
+          },
+          {
+            "id": "left",
+            "type": "source",
+            "nodeId": "c3e43def-ecd2-4e52-919b-8122a528a62f",
+            "position": "left",
+            "x": -2.799899039854244,
+            "y": 112.49995831046364,
+            "width": 6,
+            "height": 6
+          },
+          {
+            "id": "right",
+            "type": "source",
+            "nodeId": "c3e43def-ecd2-4e52-919b-8122a528a62f",
+            "position": "right",
+            "x": 271.7998953076481,
+            "y": 112.49995831046364,
+            "width": 6,
+            "height": 6
+          }
+        ],
+        "target": null
+      },
+      "selected": false,
+      "dragging": false,
+      "resizing": false,
+      "initialized": false,
+      "isParent": false,
+      "position": {
+        "x": 1130.0594235287135,
+        "y": -527.1777877204934
+      },
+      "data": {
+        "label": "Castle of Knights\n---\nNoble knights that are honorbound to save damsels in distress and also do the dirtywork of nobles if they pay more than the king.",
+        "bgColor": "#fffff0",
+        "zIndex": 0
+      },
+      "events": {},
+      "style": {
+        "width": "275px",
+        "height": "231px",
+        "zIndex": 0
+      },
+      "zIndex": 0
+    }
+  ],
+  "edges": [
+    {
+      "id": "vueflow__edge-2816818d-282b-493a-95a6-5eb4863f44a0right-05053c0e-f636-44f1-b46b-baefc38567d2left",
+      "type": "default",
+      "source": "2816818d-282b-493a-95a6-5eb4863f44a0",
+      "target": "05053c0e-f636-44f1-b46b-baefc38567d2",
+      "sourceHandle": "right",
+      "targetHandle": "left",
+      "data": {
+        "dirMode": 1,
+        "label": "Important Adventure Location"
+      },
+      "events": {},
+      "label": "Important Adventure Location",
+      "animated": false,
+      "style": {
+        "strokeWidth": 2,
+        "stroke": "#291e01"
+      },
+      "sourceNode": {
+        "id": "2816818d-282b-493a-95a6-5eb4863f44a0",
+        "type": "mindmap",
+        "dimensions": {
+          "width": 528,
+          "height": 317
+        },
+        "computedPosition": {
+          "x": 553.4228773565428,
+          "y": 187.28011118176778,
+          "z": 0
+        },
+        "handleBounds": {
+          "source": [
+            {
+              "id": "top",
+              "type": "source",
+              "nodeId": "2816818d-282b-493a-95a6-5eb4863f44a0",
+              "position": "top",
+              "x": 260.9998859096355,
+              "y": -2.7999920968550365,
+              "width": 6,
+              "height": 6
+            },
+            {
+              "id": "bottom",
+              "type": "source",
+              "nodeId": "2816818d-282b-493a-95a6-5eb4863f44a0",
+              "position": "bottom",
+              "x": 260.9998859096355,
+              "y": 313.79991634597485,
+              "width": 6,
+              "height": 6
+            },
+            {
+              "id": "left",
+              "type": "source",
+              "nodeId": "2816818d-282b-493a-95a6-5eb4863f44a0",
+              "position": "left",
+              "x": -2.800023115855301,
+              "y": 155.49996987931,
+              "width": 6,
+              "height": 6
+            },
+            {
+              "id": "right",
+              "type": "source",
+              "nodeId": "2816818d-282b-493a-95a6-5eb4863f44a0",
+              "position": "right",
+              "x": 524.7997328971258,
+              "y": 155.49996987931,
+              "width": 6,
+              "height": 6
+            }
+          ],
+          "target": null
+        },
+        "selected": false,
+        "dragging": false,
+        "resizing": false,
+        "initialized": false,
+        "isParent": false,
+        "position": {
+          "x": 553.4228773565428,
+          "y": 187.28011118176778
+        },
+        "data": {
+          "label": "The Mystic Forest\n---\nSaid to be inhabited by elves or some other useless folklore. But the point is, this place is full of old magic. Frankly, when you are exploring this place, that is in every way better off not being explored, you better watch your step. Because aside from the wolves and wildboars that inhabit these lands, there's also a lot of tigers its said. And they are some weird sort, with their eyes glowing blue.\n\nPlus, there's the issue that there's a lot of strange bugs that will eat anything organic, so better watch where you are going. Better still, just leave the damn place",
+          "bgColor": "#fffff0",
+          "zIndex": 0
+        },
+        "events": {},
+        "style": {
+          "width": "528px",
+          "height": "317px",
+          "zIndex": 0
+        },
+        "zIndex": 0
+      },
+      "targetNode": {
+        "id": "05053c0e-f636-44f1-b46b-baefc38567d2",
+        "type": "mindmap",
+        "dimensions": {
+          "width": 273,
+          "height": 209
+        },
+        "computedPosition": {
+          "x": 1465.166193588434,
+          "y": -70.58019230839989,
+          "z": 0
+        },
+        "handleBounds": {
+          "source": [
+            {
+              "id": "top",
+              "type": "source",
+              "nodeId": "05053c0e-f636-44f1-b46b-baefc38567d2",
+              "position": "top",
+              "x": 133.50006964137788,
+              "y": -2.7999959742300695,
+              "width": 6,
+              "height": 6
+            },
+            {
+              "id": "bottom",
+              "type": "source",
+              "nodeId": "05053c0e-f636-44f1-b46b-baefc38567d2",
+              "position": "bottom",
+              "x": 133.50006964137788,
+              "y": 205.79991930022445,
+              "width": 6,
+              "height": 6
+            },
+            {
+              "id": "left",
+              "type": "source",
+              "nodeId": "05053c0e-f636-44f1-b46b-baefc38567d2",
+              "position": "left",
+              "x": -2.799899039854244,
+              "y": 101.49996554037223,
+              "width": 6,
+              "height": 6
+            },
+            {
+              "id": "right",
+              "type": "source",
+              "nodeId": "05053c0e-f636-44f1-b46b-baefc38567d2",
+              "position": "right",
+              "x": 269.80003832260996,
+              "y": 101.49996554037223,
+              "width": 6,
+              "height": 6
+            }
+          ],
+          "target": null
+        },
+        "selected": false,
+        "dragging": false,
+        "resizing": false,
+        "initialized": false,
+        "isParent": false,
+        "position": {
+          "x": 1465.166193588434,
+          "y": -70.58019230839989
+        },
+        "data": {
+          "label": "Cave\n----\n<p style=\"color:white\">Quite a generic cave truth be told. Inhabited by an old bear who is too aggresive for his age. But hey, at least you get something to hit as its Armor Class is low.</p>",
+          "bgColor": "#be7f27",
+          "zIndex": 0
+        },
+        "events": {},
+        "style": {
+          "width": "273px",
+          "height": "209px",
+          "zIndex": 0
+        },
+        "zIndex": 0
+      },
+      "sourceX": 1084.2226102536686,
+      "sourceY": 345.7800810610778,
+      "targetX": 1462.3662945485798,
+      "targetY": 33.91977323197234,
+      "selected": false,
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#291e01",
+        "width": 18,
+        "height": 18
+      }
+    },
+    {
+      "id": "vueflow__edge-1791049465327right-2816818d-282b-493a-95a6-5eb4863f44a0left",
+      "type": "default",
+      "source": "1791049465327",
+      "target": "2816818d-282b-493a-95a6-5eb4863f44a0",
+      "sourceHandle": "right",
+      "targetHandle": "left",
+      "data": {
+        "dirMode": 1,
+        "label": "something"
+      },
+      "events": {},
+      "label": "something",
+      "animated": false,
+      "style": {
+        "strokeWidth": 2,
+        "stroke": "#291e01"
+      },
+      "sourceNode": {
+        "id": "1791049465327",
+        "type": "mindmap",
+        "dimensions": {
+          "width": 323,
+          "height": 285
+        },
+        "computedPosition": {
+          "x": -41.21595087352756,
+          "y": 8.107726049819718,
+          "z": 0
+        },
+        "handleBounds": {
+          "source": [
+            {
+              "id": "top",
+              "type": "source",
+              "nodeId": "1791049465327",
+              "position": "top",
+              "x": 158.49995698036892,
+              "y": -2.7999979129175863,
+              "width": 6,
+              "height": 6
+            },
+            {
+              "id": "bottom",
+              "type": "source",
+              "nodeId": "1791049465327",
+              "position": "bottom",
+              "x": 158.49995698036892,
+              "y": 281.7998752523135,
+              "width": 6,
+              "height": 6
+            },
+            {
+              "id": "left",
+              "type": "source",
+              "nodeId": "1791049465327",
+              "position": "left",
+              "x": -2.7999920968550365,
+              "y": 139.49994787846367,
+              "width": 6,
+              "height": 6
+            },
+            {
+              "id": "right",
+              "type": "source",
+              "nodeId": "1791049465327",
+              "position": "right",
+              "x": 319.7998750385926,
+              "y": 139.49994787846367,
+              "width": 6,
+              "height": 6
+            }
+          ],
+          "target": null
+        },
+        "selected": false,
+        "dragging": false,
+        "resizing": false,
+        "initialized": false,
+        "isParent": false,
+        "position": {
+          "x": -41.21595087352756,
+          "y": 8.107726049819718
+        },
+        "data": {
+          "label": "Central Town\n-----\n\nThis is about the town of **Ilverton**. There's a baker who bakes fresh bread, plus there's a tavern that mostly serves beer and some strange smelling fish soup. \n\nAnd yeah there's not much of a place of worship just some dude who shouts at the town square every morning.",
+          "bgColor": "#8bbd88",
+          "zIndex": 0
+        },
+        "events": {},
+        "style": {
+          "width": "323px",
+          "height": "285px",
+          "zIndex": 0
+        },
+        "zIndex": 0
+      },
+      "targetNode": {
+        "id": "2816818d-282b-493a-95a6-5eb4863f44a0",
+        "type": "mindmap",
+        "dimensions": {
+          "width": 528,
+          "height": 317
+        },
+        "computedPosition": {
+          "x": 553.4228773565428,
+          "y": 187.28011118176778,
+          "z": 0
+        },
+        "handleBounds": {
+          "source": [
+            {
+              "id": "top",
+              "type": "source",
+              "nodeId": "2816818d-282b-493a-95a6-5eb4863f44a0",
+              "position": "top",
+              "x": 260.9998859096355,
+              "y": -2.7999920968550365,
+              "width": 6,
+              "height": 6
+            },
+            {
+              "id": "bottom",
+              "type": "source",
+              "nodeId": "2816818d-282b-493a-95a6-5eb4863f44a0",
+              "position": "bottom",
+              "x": 260.9998859096355,
+              "y": 313.79991634597485,
+              "width": 6,
+              "height": 6
+            },
+            {
+              "id": "left",
+              "type": "source",
+              "nodeId": "2816818d-282b-493a-95a6-5eb4863f44a0",
+              "position": "left",
+              "x": -2.800023115855301,
+              "y": 155.49996987931,
+              "width": 6,
+              "height": 6
+            },
+            {
+              "id": "right",
+              "type": "source",
+              "nodeId": "2816818d-282b-493a-95a6-5eb4863f44a0",
+              "position": "right",
+              "x": 524.7997328971258,
+              "y": 155.49996987931,
+              "width": 6,
+              "height": 6
+            }
+          ],
+          "target": null
+        },
+        "selected": false,
+        "dragging": false,
+        "resizing": false,
+        "initialized": false,
+        "isParent": false,
+        "position": {
+          "x": 553.4228773565428,
+          "y": 187.28011118176778
+        },
+        "data": {
+          "label": "The Mystic Forest\n---\nSaid to be inhabited by elves or some other useless folklore. But the point is, this place is full of old magic. Frankly, when you are exploring this place, that is in every way better off not being explored, you better watch your step. Because aside from the wolves and wildboars that inhabit these lands, there's also a lot of tigers its said. And they are some weird sort, with their eyes glowing blue.\n\nPlus, there's the issue that there's a lot of strange bugs that will eat anything organic, so better watch where you are going. Better still, just leave the damn place",
+          "bgColor": "#fffff0",
+          "zIndex": 0
+        },
+        "events": {},
+        "style": {
+          "width": "528px",
+          "height": "317px",
+          "zIndex": 0
+        },
+        "zIndex": 0
+      },
+      "sourceX": 284.583924165065,
+      "sourceY": 150.6076739282834,
+      "targetX": 550.6228542406875,
+      "targetY": 345.7800810610778,
+      "selected": false,
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#291e01",
+        "width": 18,
+        "height": 18
+      }
+    },
+    {
+      "id": "vueflow__edge-2816818d-282b-493a-95a6-5eb4863f44a0right-e5e537c3-cd17-4057-af1e-52bacf668b90left",
+      "type": "default",
+      "source": "2816818d-282b-493a-95a6-5eb4863f44a0",
+      "target": "e5e537c3-cd17-4057-af1e-52bacf668b90",
+      "sourceHandle": "right",
+      "targetHandle": "left",
+      "data": {
+        "dirMode": 1
+      },
+      "events": {},
+      "label": "",
+      "animated": false,
+      "style": {
+        "strokeWidth": 2,
+        "stroke": "#291e01"
+      },
+      "sourceNode": {
+        "id": "2816818d-282b-493a-95a6-5eb4863f44a0",
+        "type": "mindmap",
+        "dimensions": {
+          "width": 528,
+          "height": 317
+        },
+        "computedPosition": {
+          "x": 553.4228773565428,
+          "y": 187.28011118176778,
+          "z": 0
+        },
+        "handleBounds": {
+          "source": [
+            {
+              "id": "top",
+              "type": "source",
+              "nodeId": "2816818d-282b-493a-95a6-5eb4863f44a0",
+              "position": "top",
+              "x": 260.9998859096355,
+              "y": -2.7999920968550365,
+              "width": 6,
+              "height": 6
+            },
+            {
+              "id": "bottom",
+              "type": "source",
+              "nodeId": "2816818d-282b-493a-95a6-5eb4863f44a0",
+              "position": "bottom",
+              "x": 260.9998859096355,
+              "y": 313.79991634597485,
+              "width": 6,
+              "height": 6
+            },
+            {
+              "id": "left",
+              "type": "source",
+              "nodeId": "2816818d-282b-493a-95a6-5eb4863f44a0",
+              "position": "left",
+              "x": -2.800023115855301,
+              "y": 155.49996987931,
+              "width": 6,
+              "height": 6
+            },
+            {
+              "id": "right",
+              "type": "source",
+              "nodeId": "2816818d-282b-493a-95a6-5eb4863f44a0",
+              "position": "right",
+              "x": 524.7997328971258,
+              "y": 155.49996987931,
+              "width": 6,
+              "height": 6
+            }
+          ],
+          "target": null
+        },
+        "selected": false,
+        "dragging": false,
+        "resizing": false,
+        "initialized": false,
+        "isParent": false,
+        "position": {
+          "x": 553.4228773565428,
+          "y": 187.28011118176778
+        },
+        "data": {
+          "label": "The Mystic Forest\n---\nSaid to be inhabited by elves or some other useless folklore. But the point is, this place is full of old magic. Frankly, when you are exploring this place, that is in every way better off not being explored, you better watch your step. Because aside from the wolves and wildboars that inhabit these lands, there's also a lot of tigers its said. And they are some weird sort, with their eyes glowing blue.\n\nPlus, there's the issue that there's a lot of strange bugs that will eat anything organic, so better watch where you are going. Better still, just leave the damn place",
+          "bgColor": "#fffff0",
+          "zIndex": 0
+        },
+        "events": {},
+        "style": {
+          "width": "528px",
+          "height": "317px",
+          "zIndex": 0
+        },
+        "zIndex": 0
+      },
+      "targetNode": {
+        "id": "e5e537c3-cd17-4057-af1e-52bacf668b90",
+        "type": "mindmap",
+        "dimensions": {
+          "width": 160,
+          "height": 160
+        },
+        "computedPosition": {
+          "x": 1466.704056051682,
+          "y": 215.5444229152224,
+          "z": 0
+        },
+        "handleBounds": {
+          "source": [
+            {
+              "id": "top",
+              "type": "source",
+              "nodeId": "e5e537c3-cd17-4057-af1e-52bacf668b90",
+              "position": "top",
+              "x": 76.99995326801496,
+              "y": -2.7999920968550365,
+              "width": 6,
+              "height": 6
+            },
+            {
+              "id": "bottom",
+              "type": "source",
+              "nodeId": "e5e537c3-cd17-4057-af1e-52bacf668b90",
+              "position": "bottom",
+              "x": 76.99995326801496,
+              "y": 156.79994516138535,
+              "width": 6,
+              "height": 6
+            },
+            {
+              "id": "left",
+              "type": "source",
+              "nodeId": "e5e537c3-cd17-4057-af1e-52bacf668b90",
+              "position": "left",
+              "x": -2.799899039854244,
+              "y": 76.9999687775151,
+              "width": 6,
+              "height": 6
+            },
+            {
+              "id": "right",
+              "type": "source",
+              "nodeId": "e5e537c3-cd17-4057-af1e-52bacf668b90",
+              "position": "right",
+              "x": 156.80017780388732,
+              "y": 76.9999687775151,
+              "width": 6,
+              "height": 6
+            }
+          ],
+          "target": null
+        },
+        "selected": false,
+        "dragging": false,
+        "resizing": false,
+        "initialized": false,
+        "isParent": false,
+        "position": {
+          "x": 1466.704056051682,
+          "y": 215.5444229152224
+        },
+        "data": {
+          "label": "Druid Circle",
+          "bgColor": "#fffff0",
+          "zIndex": 0
+        },
+        "events": {},
+        "style": {
+          "width": "160px",
+          "height": "160px",
+          "zIndex": 0
+        },
+        "zIndex": 0
+      },
+      "sourceX": 1084.2226102536686,
+      "sourceY": 345.7800810610778,
+      "targetX": 1463.904157011828,
+      "targetY": 295.5443916927375,
+      "selected": false,
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#291e01",
+        "width": 18,
+        "height": 18
+      }
+    },
+    {
+      "id": "vueflow__edge-5be63ae2-a7b9-4f5d-96d5-73d50921cd51bottom-1791049465327top",
+      "type": "default",
+      "source": "5be63ae2-a7b9-4f5d-96d5-73d50921cd51",
+      "target": "1791049465327",
+      "sourceHandle": "bottom",
+      "targetHandle": "top",
+      "data": {
+        "dirMode": 2
+      },
+      "events": {},
+      "label": "",
+      "animated": false,
+      "style": {
+        "strokeWidth": 2,
+        "stroke": "#291e01"
+      },
+      "sourceNode": {
+        "id": "5be63ae2-a7b9-4f5d-96d5-73d50921cd51",
+        "type": "mindmap",
+        "dimensions": {
+          "width": 294,
+          "height": 164
+        },
+        "computedPosition": {
+          "x": 599.7840491264724,
+          "y": -403.8922739501802,
+          "z": 0
+        },
+        "handleBounds": {
+          "source": [
+            {
+              "id": "top",
+              "type": "source",
+              "nodeId": "5be63ae2-a7b9-4f5d-96d5-73d50921cd51",
+              "position": "top",
+              "x": 144.00006326883445,
+              "y": -2.7999920968550365,
+              "width": 6,
+              "height": 6
+            },
+            {
+              "id": "bottom",
+              "type": "source",
+              "nodeId": "5be63ae2-a7b9-4f5d-96d5-73d50921cd51",
+              "position": "bottom",
+              "x": 144.00006326883445,
+              "y": 160.79993830246403,
+              "width": 6,
+              "height": 6
+            },
+            {
+              "id": "left",
+              "type": "source",
+              "nodeId": "5be63ae2-a7b9-4f5d-96d5-73d50921cd51",
+              "position": "left",
+              "x": -2.799899039854244,
+              "y": 78.99996534805442,
+              "width": 6,
+              "height": 6
+            },
+            {
+              "id": "right",
+              "type": "source",
+              "nodeId": "5be63ae2-a7b9-4f5d-96d5-73d50921cd51",
+              "position": "right",
+              "x": 290.8000876155237,
+              "y": 78.99996534805442,
+              "width": 6,
+              "height": 6
+            }
+          ],
+          "target": null
+        },
+        "selected": false,
+        "dragging": false,
+        "resizing": false,
+        "initialized": false,
+        "isParent": false,
+        "position": {
+          "x": 599.7840491264724,
+          "y": -403.8922739501802
+        },
+        "data": {
+          "label": "Big Road\n---\nThink of it as a big highway. I mean, I had to keep something that connects a lot of places together without messing stuff up.",
+          "bgColor": "#e6eb6a",
+          "zIndex": 0
+        },
+        "events": {},
+        "style": {
+          "width": "294px",
+          "height": "164px",
+          "zIndex": 0
+        },
+        "zIndex": 0
+      },
+      "targetNode": {
+        "id": "1791049465327",
+        "type": "mindmap",
+        "dimensions": {
+          "width": 323,
+          "height": 285
+        },
+        "computedPosition": {
+          "x": -41.21595087352756,
+          "y": 8.107726049819718,
+          "z": 0
+        },
+        "handleBounds": {
+          "source": [
+            {
+              "id": "top",
+              "type": "source",
+              "nodeId": "1791049465327",
+              "position": "top",
+              "x": 158.49995698036892,
+              "y": -2.7999979129175863,
+              "width": 6,
+              "height": 6
+            },
+            {
+              "id": "bottom",
+              "type": "source",
+              "nodeId": "1791049465327",
+              "position": "bottom",
+              "x": 158.49995698036892,
+              "y": 281.7998752523135,
+              "width": 6,
+              "height": 6
+            },
+            {
+              "id": "left",
+              "type": "source",
+              "nodeId": "1791049465327",
+              "position": "left",
+              "x": -2.7999920968550365,
+              "y": 139.49994787846367,
+              "width": 6,
+              "height": 6
+            },
+            {
+              "id": "right",
+              "type": "source",
+              "nodeId": "1791049465327",
+              "position": "right",
+              "x": 319.7998750385926,
+              "y": 139.49994787846367,
+              "width": 6,
+              "height": 6
+            }
+          ],
+          "target": null
+        },
+        "selected": false,
+        "dragging": false,
+        "resizing": false,
+        "initialized": false,
+        "isParent": false,
+        "position": {
+          "x": -41.21595087352756,
+          "y": 8.107726049819718
+        },
+        "data": {
+          "label": "Central Town\n-----\n\nThis is about the town of **Ilverton**. There's a baker who bakes fresh bread, plus there's a tavern that mostly serves beer and some strange smelling fish soup. \n\nAnd yeah there's not much of a place of worship just some dude who shouts at the town square every morning.",
+          "bgColor": "#8bbd88",
+          "zIndex": 0
+        },
+        "events": {},
+        "style": {
+          "width": "323px",
+          "height": "285px",
+          "zIndex": 0
+        },
+        "zIndex": 0
+      },
+      "sourceX": 746.7841123953068,
+      "sourceY": -237.09233564771617,
+      "targetX": 120.28400610684136,
+      "targetY": 5.307728136902131,
+      "selected": false,
+      "markerStart": {
+        "type": "arrowclosed",
+        "color": "#291e01",
+        "width": 18,
+        "height": 18
+      }
+    },
+    {
+      "id": "vueflow__edge-5be63ae2-a7b9-4f5d-96d5-73d50921cd51right-c3e43def-ecd2-4e52-919b-8122a528a62fleft",
+      "type": "default",
+      "source": "5be63ae2-a7b9-4f5d-96d5-73d50921cd51",
+      "target": "c3e43def-ecd2-4e52-919b-8122a528a62f",
+      "sourceHandle": "right",
+      "targetHandle": "left",
+      "data": {
+        "dirMode": 1
+      },
+      "events": {},
+      "label": "",
+      "animated": false,
+      "style": {
+        "strokeWidth": 2,
+        "stroke": "#291e01"
+      },
+      "sourceNode": {
+        "id": "5be63ae2-a7b9-4f5d-96d5-73d50921cd51",
+        "type": "mindmap",
+        "dimensions": {
+          "width": 294,
+          "height": 164
+        },
+        "computedPosition": {
+          "x": 599.7840491264724,
+          "y": -403.8922739501802,
+          "z": 0
+        },
+        "handleBounds": {
+          "source": [
+            {
+              "id": "top",
+              "type": "source",
+              "nodeId": "5be63ae2-a7b9-4f5d-96d5-73d50921cd51",
+              "position": "top",
+              "x": 144.00006326883445,
+              "y": -2.7999920968550365,
+              "width": 6,
+              "height": 6
+            },
+            {
+              "id": "bottom",
+              "type": "source",
+              "nodeId": "5be63ae2-a7b9-4f5d-96d5-73d50921cd51",
+              "position": "bottom",
+              "x": 144.00006326883445,
+              "y": 160.79993830246403,
+              "width": 6,
+              "height": 6
+            },
+            {
+              "id": "left",
+              "type": "source",
+              "nodeId": "5be63ae2-a7b9-4f5d-96d5-73d50921cd51",
+              "position": "left",
+              "x": -2.799899039854244,
+              "y": 78.99996534805442,
+              "width": 6,
+              "height": 6
+            },
+            {
+              "id": "right",
+              "type": "source",
+              "nodeId": "5be63ae2-a7b9-4f5d-96d5-73d50921cd51",
+              "position": "right",
+              "x": 290.8000876155237,
+              "y": 78.99996534805442,
+              "width": 6,
+              "height": 6
+            }
+          ],
+          "target": null
+        },
+        "selected": false,
+        "dragging": false,
+        "resizing": false,
+        "initialized": false,
+        "isParent": false,
+        "position": {
+          "x": 599.7840491264724,
+          "y": -403.8922739501802
+        },
+        "data": {
+          "label": "Big Road\n---\nThink of it as a big highway. I mean, I had to keep something that connects a lot of places together without messing stuff up.",
+          "bgColor": "#e6eb6a",
+          "zIndex": 0
+        },
+        "events": {},
+        "style": {
+          "width": "294px",
+          "height": "164px",
+          "zIndex": 0
+        },
+        "zIndex": 0
+      },
+      "targetNode": {
+        "id": "c3e43def-ecd2-4e52-919b-8122a528a62f",
+        "type": "mindmap",
+        "dimensions": {
+          "width": 275,
+          "height": 231
+        },
+        "computedPosition": {
+          "x": 1130.0594235287135,
+          "y": -527.1777877204934,
+          "z": 0
+        },
+        "handleBounds": {
+          "source": [
+            {
+              "id": "top",
+              "type": "source",
+              "nodeId": "c3e43def-ecd2-4e52-919b-8122a528a62f",
+              "position": "top",
+              "x": 134.49999813389695,
+              "y": -2.7999920968550365,
+              "width": 6,
+              "height": 6
+            },
+            {
+              "id": "bottom",
+              "type": "source",
+              "nodeId": "c3e43def-ecd2-4e52-919b-8122a528a62f",
+              "position": "bottom",
+              "x": 134.49999813389695,
+              "y": 227.7999397367826,
+              "width": 6,
+              "height": 6
+            },
+            {
+              "id": "left",
+              "type": "source",
+              "nodeId": "c3e43def-ecd2-4e52-919b-8122a528a62f",
+              "position": "left",
+              "x": -2.799899039854244,
+              "y": 112.49995831046364,
+              "width": 6,
+              "height": 6
+            },
+            {
+              "id": "right",
+              "type": "source",
+              "nodeId": "c3e43def-ecd2-4e52-919b-8122a528a62f",
+              "position": "right",
+              "x": 271.7998953076481,
+              "y": 112.49995831046364,
+              "width": 6,
+              "height": 6
+            }
+          ],
+          "target": null
+        },
+        "selected": false,
+        "dragging": false,
+        "resizing": false,
+        "initialized": false,
+        "isParent": false,
+        "position": {
+          "x": 1130.0594235287135,
+          "y": -527.1777877204934
+        },
+        "data": {
+          "label": "Castle of Knights\n---\nNoble knights that are honorbound to save damsels in distress and also do the dirtywork of nobles if they pay more than the king.",
+          "bgColor": "#fffff0",
+          "zIndex": 0
+        },
+        "events": {},
+        "style": {
+          "width": "275px",
+          "height": "231px",
+          "zIndex": 0
+        },
+        "zIndex": 0
+      },
+      "sourceX": 896.5841367419961,
+      "sourceY": -321.8923086021258,
+      "targetX": 1127.2595244888594,
+      "targetY": -411.67782941002974,
+      "selected": false,
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#291e01",
+        "width": 18,
+        "height": 18
+      }
+    }
+  ]
+}

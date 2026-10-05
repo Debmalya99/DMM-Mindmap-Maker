@@ -18,6 +18,7 @@
         @blur="stopEditing"
         @click.stop
         placeholder="Type markdown / LaTeX..."
+        class="nokey"
       ></textarea>
 
       <!-- View Mode: Rendered Markdown & LaTeX -->
@@ -137,6 +138,7 @@ const onDelete = () => {
   overflow-wrap: break-word;
   height: 100%;
   line-height: 1.5;
+  /* font-family: Georgia, "Times New Roman", serif; */
 }
 
 .rendered-content p {
@@ -151,6 +153,7 @@ const onDelete = () => {
   margin-top: 0.5rem;
   margin-bottom: 0.3rem;
   color: #1a252f;
+  font-family: Georgia, "Times New Roman", serif;
 }
 
 .rendered-content h1 { font-size: 1.3rem; }

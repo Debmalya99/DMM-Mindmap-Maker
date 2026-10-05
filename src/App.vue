@@ -16,9 +16,10 @@
             <div class="title-row">
               <h3 class="current-file-name" :title="currentFileName">{{ currentFileName }}</h3>
               <HelpPopover>
-                <small>Drag from any pin (top, bottom, left, right) to another pin to create precise solid connections. Click a node to edit markdown/LaTeX or change its color. Shift-LeftClick & Drag to select multiple nodes.</small>
+                <small>Drag from any pin (top, bottom, left, right) to another pin to create precise solid connections. Click a node to edit markdown/LaTeX or change its color. Shift-LeftClick & Drag to select multiple nodes. Right-click a node, a connector, or the canvas to get the same options as this toolbar.</small>
                 <div class="help-shortcuts">
-                  <small><strong>Ctrl+A</strong> add node &middot; <strong>Ctrl+D</strong> duplicate &middot; <strong>Ctrl+S</strong> save &middot; <strong>Ctrl+O</strong> open &middot; <strong>D</strong> edge direction &middot; <strong>S</strong> edge style &middot; <strong>Esc</strong> deselect current node</small>
+                  <small><strong>Ctrl+A</strong> add node &middot; <strong>Ctrl+D</strong> duplicate &middot; <strong>Ctrl+S</strong> save &middot; <strong>Ctrl+O</strong> open &middot; <strong>D</strong> edge direction &middot; <strong>S</strong> edge style &middot; <strong>Esc</strong> deselect current node &middot; <strong>T</strong> Toggle this toolbar
+                  </small>
                 </div>
               </HelpPopover>
               
@@ -34,70 +35,32 @@
         </div>
 
         <div class="sidebar-body" v-if="!isToolbarCollapsed">
-          <button @click="addNode" class="btn primary">Add Node</button>
+          <button @click="addNode()" class="btn primary">Add Node</button>
           <button @click="recenterMap" class="btn secondary">Re-center MindMap</button>
 
           <!-- Node Options (Shows up when one or more nodes are selected) -->
-          <div class="color-palette-section" v-if="hasNodeSelection">
-            <h3>Node Options</h3>
-            <button @click="duplicateSelectedNodes" class="btn secondary">{{ duplicateButtonLabel }}</button>
-
-            <!-- Colour is per-node, so it needs a single active node -->
-            <template v-if="selectedNodeId">
-              <h3>Node Color</h3>
-              <div class="color-grid">
-                <button
-                  v-for="color in colors"
-                  :key="color"
-                  class="color-swatch"
-                  :style="{ backgroundColor: color }"
-                  :class="{ active: getNodeColor(selectedNodeId) === color }"
-                  @click="updateNodeColor(color)"
-                  :title="color"
-                ></button>
-              </div>
-               <div class="custom-color-picker-row">
-                 <label for="custom-node-color">Custom Color:</label>
-                 <input
-                   id="custom-node-color"
-                   type="color"
-                   class="color-picker-input"
-                   :value="getNodeColor(selectedNodeId)"
-                   @input="(e) => updateNodeColor(e.target.value)"
-                 />
-               </div>
-
-               <div class="zindex-picker-row">
-                 <label for="node-zindex">Z-Index:</label>
-                 <input
-                   id="node-zindex"
-                   type="number"
-                   step="1"
-                   class="zindex-input"
-                   :value="getNodeZIndex(selectedNodeId)"
-                   @input="(e) => updateNodeZIndex(Number(e.target.value))"
-                 />
-               </div>
-             </template>
-          </div>
+          <NodeOptionsPanel
+            v-if="hasNodeSelection"
+            :colors="colors"
+            :nodes="nodes"
+            :selected-node-id="selectedNodeId"
+            :selected-node-ids="selectedNodeIds"
+            @duplicate="duplicateSelectedNodes"
+            @update-color="updateNodeColor"
+            @update-zindex="updateNodeZIndex"
+            @lock-movement="lockNodePosition"
+          />
 
           <!-- Connector Direction (Shows up when a connector is selected) -->
-          <div class="direction-section" v-if="selectedEdgeId">
-            <h3>Connector Options</h3>
-            <button @click="switchEdgeDirection" class="btn secondary">Switch Connector Direction</button>
-            <div class="direction-current">
-              Current: <strong>{{ getEdgeDirectionLabel }}</strong>
-            </div>
-            <input
-              type="text"
-              class="edge-label-input"
-              placeholder="Connector label (optional)"
-              :value="getSelectedEdge?.data?.label || ''"
-              @input="updateEdgeLabel"
-            />
-            <button @click="toggleEdgeStyle" class="btn secondary">Toggle Style</button>
-            <button @click="deleteSelectedEdge" class="btn danger">Remove Connector</button>  
-          </div>
+          <ConnectorOptionsPanel
+            v-if="selectedEdgeId"
+            :edge="getSelectedEdge"
+            :direction-label="getEdgeDirectionLabel"
+            @switch-direction="switchEdgeDirection"
+            @update-label="updateEdgeLabel"
+            @toggle-style="toggleEdgeStyle"
+            @remove="deleteSelectedEdge"
+          />
         </div>
 
         <div class="toolbar-actions" v-if="!isToolbarCollapsed">
@@ -119,17 +82,64 @@
           :node-types="nodeTypes"
           :connection-mode="ConnectionMode.Loose"
           :auto-bring-nodes-to-front="false"
+          :min-zoom="0.2"
+          :pan-activation-key-code="null"
           @connect="onConnect"
           @connect-start="onConnectStart"
           @connect-end="onConnectEnd"
           @node-click="onNodeClick"
           @edge-click="onEdgeClick"
           @pane-click="onPaneClick"
+          @node-context-menu="onNodeContextMenu"
+          @edge-context-menu="onEdgeContextMenu"
+          @pane-context-menu="onPaneContextMenu"
           class="vue-flow-canvas"
         >
           <Background pattern-color="#aaa" :gap="16" />
           <Controls />
         </VueFlow>
+
+        <!-- Right-click menu, mirroring the sidebar options for whatever
+             the click landed on -->
+        <ContextMenu
+          v-if="contextMenu.visible"
+          :key="contextMenu.token"
+          :x="contextMenu.x"
+          :y="contextMenu.y"
+          @close="closeContextMenu"
+        >
+          <NodeOptionsPanel
+            v-if="contextMenu.target === 'node'"
+            :colors="colors"
+            :nodes="nodes"
+            :selected-node-id="selectedNodeId"
+            :selected-node-ids="selectedNodeIds"
+            @duplicate="duplicateSelectedNodes"
+            @update-color="updateNodeColor"
+            @update-zindex="updateNodeZIndex"
+            @lock-movement="lockNodePosition"
+          />
+
+          <ConnectorOptionsPanel
+            v-else-if="contextMenu.target === 'edge'"
+            :edge="getSelectedEdge"
+            :direction-label="getEdgeDirectionLabel"
+            @switch-direction="switchEdgeDirection"
+            @update-label="updateEdgeLabel"
+            @toggle-style="toggleEdgeStyle"
+            @remove="removeConnectorFromMenu"
+          />
+
+          <template v-else>
+            <h3 class="context-menu-title">Mindmap</h3>
+            <button @click="addNodeFromMenu" class="btn primary">Add Node</button>
+            <button @click="recenterMap" class="btn secondary">Re-center MindMap</button>
+            <hr />
+            <button @click="saveMindmap" class="btn secondary">Save</button>
+            <button @click="saveAsMindmap" class="btn secondary">Save As</button>
+            <button @click="loadMindmap" class="btn secondary">Load</button>
+          </template>
+        </ContextMenu>
       </section>
     </main>
   </div>
@@ -143,6 +153,9 @@ import { Controls } from '@vue-flow/controls'
 import MindmapNode from './components/MindmapNode.vue'
 import TopNavBar from './components/TopNavBar.vue'
 import HelpPopover from './components/HelpPopover.vue'
+import NodeOptionsPanel from './components/NodeOptionsPanel.vue'
+import ConnectorOptionsPanel from './components/ConnectorOptionsPanel.vue'
+import ContextMenu from './components/ContextMenu.vue'
 
 // Import Vue Flow styles required for UI rendering
 import '@vue-flow/core/dist/style.css'
@@ -156,6 +169,12 @@ const selectedEdgeId = ref(null)
 const currentFileHandle = ref(null)
 const saveStatus = ref('') // '' | 'saving' | 'saved'
 let saveTimer = null
+
+// Where the right-click menu is anchored and what it should offer.
+// target is 'node' | 'edge' | 'pane', and flowPosition is the clicked spot
+// in canvas coordinates (used to drop a new node under the cursor).
+// token changes on every open so the menu remounts and re-measures itself.
+const contextMenu = ref({ visible: false, x: 0, y: 0, target: 'pane', flowPosition: null, token: 0 })
 
 // Remembers the last node the user clicked, so Ctrl+D still has a target
 // after the selection has been cleared
@@ -303,21 +322,89 @@ const onConnectEnd = () => {
   isConnecting.value = false
 }
 
-const onNodeClick = (event) => {
-  selectedNodeId.value = event.node.id
+// A node and a connector can never both own the option panels
+const selectNode = (id) => {
+  selectedNodeId.value = id
   selectedEdgeId.value = null
-  lastClickedNodeId.value = event.node.id
+  lastClickedNodeId.value = id
+}
+
+const selectEdge = (id) => {
+  selectedEdgeId.value = id
+  selectedNodeId.value = null
+}
+
+const onNodeClick = (event) => {
+  selectNode(event.node.id)
 }
 
 const onEdgeClick = (event) => {
-  selectedEdgeId.value = event.edge.id
-  selectedNodeId.value = null
+  selectEdge(event.edge.id)
 }
 
 const onPaneClick = () => {
   selectedNodeId.value = null
   selectedEdgeId.value = null
 }
+
+const closeContextMenu = () => {
+  contextMenu.value.visible = false
+}
+
+const openContextMenu = (target, event) => {
+  contextMenu.value = {
+    visible: true,
+    x: event.clientX,
+    y: event.clientY,
+    target,
+    flowPosition: screenToFlowCoordinate({ x: event.clientX, y: event.clientY }),
+    token: contextMenu.value.token + 1,
+  }
+}
+
+// Right-clicking has to move the selection too, otherwise the menu would
+// offer options for whatever was picked with the last left click
+const onNodeContextMenu = ({ event, node }) => {
+  event.preventDefault()
+  if (!event.shiftKey) {
+    nodes.value.forEach((n) => (n.selected = false))
+    node.selected = true
+  }
+  selectNode(node.id)
+  openContextMenu('node', event)
+}
+
+const onEdgeContextMenu = ({ event, edge }) => {
+  event.preventDefault()
+  selectEdge(edge.id)
+  openContextMenu('edge', event)
+}
+
+const onPaneContextMenu = (event) => {
+  event.preventDefault()
+  onPaneClick()
+  openContextMenu('pane', event)
+}
+
+// Adding a node from the menu puts it under the cursor rather than in the
+// middle of the viewport
+const addNodeFromMenu = () => {
+  addNode(contextMenu.value.flowPosition)
+  closeContextMenu()
+}
+
+const removeConnectorFromMenu = () => {
+  deleteSelectedEdge()
+  closeContextMenu()
+}
+
+// The subject of the menu can disappear while it is open (the Delete key, a
+// reload), which would otherwise leave dead controls on screen
+watch([selectedNodeId, selectedEdgeId], () => {
+  if (!contextMenu.value.visible) return
+  if (contextMenu.value.target === 'node' && !selectedNodeId.value) closeContextMenu()
+  if (contextMenu.value.target === 'edge' && !selectedEdgeId.value) closeContextMenu()
+})
 
 const getSelectedEdge = computed(() => edges.value.find((e) => e.id === selectedEdgeId.value) || null)
 
@@ -328,11 +415,6 @@ const selectedNodeIds = computed(() => nodes.value.filter((n) => n.selected).map
 // A box selection leaves selectedNodeId empty (there is no single active node),
 // so the panel has to key off the selection as a whole
 const hasNodeSelection = computed(() => selectedNodeIds.value.length > 0 || !!selectedNodeId.value)
-
-const duplicateButtonLabel = computed(() => {
-  const count = selectedNodeIds.value.length
-  return count > 1 ? `Duplicate ${count} Nodes` : 'Duplicate Node'
-})
 
 const getEdgeDirectionLabel = computed(() => {
   const edge = getSelectedEdge.value
@@ -354,11 +436,10 @@ const switchEdgeDirection = () => {
   applyDirection(edge, next)
 }
 
-const updateEdgeLabel = (event) => {
+const updateEdgeLabel = (value) => {
   const edge = getSelectedEdge.value
   if (!edge) return
   if (!edge.data) edge.data = {}
-  const value = event.target.value
   edge.data.label = value
   // Vue Flow renders edge labels from the top-level `label` prop
   edge.label = value || undefined
@@ -379,11 +460,6 @@ const toggleEdgeStyle = () => {
   edge.style = currentStyle
 }
 
-const getNodeColor = (id) => {
-  const node = nodes.value.find((n) => n.id === id)
-  return node?.data?.bgColor || '#fffff0'
-}
-
 const updateNodeColor = (color) => {
   if (!selectedNodeId.value) return
   const node = nodes.value.find((n) => n.id === selectedNodeId.value)
@@ -393,9 +469,18 @@ const updateNodeColor = (color) => {
   }
 }
 
-const getNodeZIndex = (id) => {
-  const node = nodes.value.find((n) => n.id === id)
-  return node?.zIndex ?? node?.data?.zIndex ?? 0
+// Feature/node-movement-lock
+const lockNodePosition = () => {
+  if (!selectedNodeId.value) return
+  const node = nodes.value.find((n) => n.id === selectedNodeId.value)
+  if (node) {
+    // if (!node.draggable) {node.draggable = false; return}
+    // console.log('here')
+
+    // At the beginning, the draggable will be undefined so that will be treated as false.
+    node.draggable = node.draggable === false
+    
+  }
 }
 
 const updateNodeZIndex = (zIndex) => {
@@ -411,20 +496,28 @@ const updateNodeZIndex = (zIndex) => {
   }
 }
 
-const addNode = () => {
+// anchorPosition is the canvas point to centre the new node on. When it is
+// omitted the node spawns in the middle of the current (panned/zoomed)
+// viewport instead
+const addNode = (anchorPosition = null) => {
   const newId = String(Date.now())
 
-  // Spawn at the centre of the current (panned/zoomed) viewport
-  const el = document.querySelector('.vue-flow__renderer')
+  let center = anchorPosition
+  if (!center) {
+    const el = document.querySelector('.vue-flow__renderer')
+    if (el) {
+      const rect = el.getBoundingClientRect()
+      center = screenToFlowCoordinate({
+        x: rect.left + rect.width / 2,
+        y: rect.top + rect.height / 2,
+      })
+    }
+  }
+
   let position
-  if (el) {
-    const rect = el.getBoundingClientRect()
-    const flowPos = screenToFlowCoordinate({
-      x: rect.left + rect.width / 2,
-      y: rect.top + rect.height / 2,
-    })
+  if (center) {
     // node position is its top-left, so offset by half the node size to centre it
-    position = { x: flowPos.x - 80, y: flowPos.y - 80 }
+    position = { x: center.x - 80, y: center.y - 80 }
   } else {
     position = { x: Math.random() * 400 + 100, y: Math.random() * 300 + 100 }
   }
@@ -758,6 +851,14 @@ onMounted(() => {
         return
       }
     }
+
+    // Feature/toggle-toolbar: Added the hotkey 'T' for toggling the toolbar
+    if (e.key === 't' || e.key === 'T') {
+      if (isInInput) return
+      e.preventDefault()
+      toggleToolbar()
+      return
+    }
   })
 })
 </script>
@@ -919,85 +1020,6 @@ body {
   background: #cf6052;
 }
 
-/* Color Palette styles */
-.color-palette-section {
-  background: #f9fbfb;
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.color-palette-section h3 {
-  font-size: 0.9rem;
-  color: #2c3e50;
-}
-
-.color-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 6px;
-}
-
-.color-swatch {
-  width: 28px;
-  height: 28px;
-  border: 2px solid #ccc;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: transform 0.2s, border-color 0.2s;
-}
-
-.color-swatch:hover {
-  transform: scale(1.1);
-  border-color: #42b883;
-}
-
-.color-swatch.active {
-  border-color: #2c3e50;
-  box-shadow: 0 0 0 2px #42b883;
-}
-
-/* Connector Direction section styles */
-.direction-section {
-  background: #f9fbfb;
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.direction-section h3 {
-  font-size: 0.9rem;
-  color: #2c3e50;
-}
-
-.direction-current {
-  font-size: 0.8rem;
-  color: #666;
-  text-align: center;
-}
-
-.edge-label-input {
-  width: 100%;
-  padding: 0.4rem 0.6rem;
-  font-size: 0.85rem;
-  font-family: inherit;
-  color: #2c3e50;
-  background: white;
-  border: 1px solid #d0d0d0;
-  border-radius: 4px;
-}
-
-.edge-label-input:focus {
-  outline: none;
-  border-color: #2c3e50;
-}
-
 /* Keep rendered connector labels small and legible */
 .vue-flow__edge-textbg {
   fill: #f5f1eb;
@@ -1006,6 +1028,12 @@ body {
 .vue-flow__edge-text {
   font-size: 20px;
   fill: #2c3e50;
+}
+
+/* Unscoped, global style block */
+.vue-flow__edge.selected .vue-flow__edge-path {
+  stroke: #0caded !important; /* Or any color you prefer */
+  stroke-width: 3 !important; /* Optional: make it slightly thicker too */
 }
 
 .title-row {
@@ -1106,9 +1134,17 @@ body {
   height: 100%;
 }
 
+.vue-flow__node{
+  border: 2px dashed transparent;
+  transition: border-color 0.3s ease;
+}
+
 /* Remove Vue Flow selection outline and resizer border */
 .vue-flow__node.selected {
-  border: none !important;
+  /*border: none !important;*/
+  border: 2px dashed blue;
+
+  border-radius: 20px;
   box-shadow: none !important;
   outline: none !important;
 }
@@ -1121,53 +1157,17 @@ body {
   stroke: transparent !important;
 }
 
-.custom-color-picker-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 8px;
-  font-size: 0.85rem;
+/* Context menu content is authored here but rendered in ContextMenu.vue */
+.context-menu-title {
+  font-size: 0.9rem;
   color: #2c3e50;
 }
 
-.color-picker-input {
-  -webkit-appearance: none;
+.context-menu hr {
+  width: 100%;
+  margin: 2px 0;
   border: none;
-  width: 36px;
-  height: 28px;
-  border-radius: 4px;
-  cursor: pointer;
-  background: transparent;
-}
-
-.color-picker-input::-webkit-color-swatch-wrapper {
-  padding: 0;
-}
-
-.zindex-picker-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 8px;
-  font-size: 0.85rem;
-  color: #2c3e50;
-}
-
-.zindex-input {
-  width: 60px;
-  padding: 0.4rem 0.6rem;
-  font-size: 0.85rem;
-  font-family: inherit;
-  color: #2c3e50;
-  background: white;
-  border: 1px solid #d0d0d0;
-  border-radius: 4px;
-  text-align: right;
-}
-
-.zindex-input:focus {
-  outline: none;
-  border-color: #2c3e50;
+  border-top: 1px solid #e8e8e8;
 }
 
 .save-indicator {
