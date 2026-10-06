@@ -21,7 +21,7 @@ Except when you want to do that digitally, the tools are often paid or behind pl
 	- S: Toggle connector direction
 	- Esc: Deselect the current node
 	- T: Toggle the left side bar
-	- Right click: Show the edge or node options
+	- Right click: Show the edge or node options (i.e. same options as the left sidebar)
 - Lock/Unlock the position of a node.
 
 ### Limitations
@@ -42,4 +42,4 @@ npm run build #builds the app into the dist/ folder.
 ~~~
 
 ## Acknowledgement
-This project uses Vue JS and VueFlow component. It was largely with a large amount of **AI Assistance** as that problem of creating mind maps easily was something I faced everyday but did not have the proper web development know-how to pull that off on my own. I used **OpenCode** and Big Pickle or Gemini Free Models to largely develop it. Later on when the major features were set in stone, I moved more and more towards manual development. If you are interested to improve the general development, I would encourage you to take a look at the AGENTS.md and improve it.
+This project uses Vue JS and the VueFlow component. It was developed with a large amount of **AI Assistance** as the problem of creating mind maps easily was something I faced everyday but did not have the proper web development know-how to pull that off on my own. I used **OpenCode** and Big Pickle or Gemini Free Models to largely develop it. Later on when the major features were set in stone, I moved more and more towards manual development. If you are interested to improve the general development, I would encourage you to take a look at the AGENTS.md and improve it.
