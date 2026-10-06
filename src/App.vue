@@ -140,6 +140,8 @@
             <button @click="loadMindmap" class="btn secondary">Load</button>
           </template>
         </ContextMenu>
+
+        <LivePreviewPanel/>
       </section>
     </main>
   </div>
@@ -161,6 +163,9 @@ import ContextMenu from './components/ContextMenu.vue'
 import '@vue-flow/core/dist/style.css'
 import '@vue-flow/core/dist/theme-default.css'
 import '@vue-flow/controls/dist/style.css'
+
+//Feature/markdown-live-preview
+import LivePreviewPanel from './components/LivePreviewPanel.vue'
 
 const isToolbarCollapsed = ref(false)
 const isConnecting = ref(false)

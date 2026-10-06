@@ -30,14 +30,15 @@
 </template>
 
 <script setup>
-import { ref, computed, nextTick } from 'vue'
+import { ref, computed, nextTick, watch } from 'vue'
 import { Handle, Position } from '@vue-flow/core'
 import { NodeResizer } from '@vue-flow/node-resizer'
 import { marked } from 'marked'
 import katex from 'katex'
 
-// Feature/markdown-live-preview: Import the util
+// Feature/markdown-live-preview: 
 import { renderMarkdown } from '../utils/markdownRenderer'
+import { useEditingNode } from '../composables/useEditingNode'
 
 // Import styles
 import '@vue-flow/node-resizer/dist/style.css'
@@ -55,10 +56,15 @@ const props = defineProps({
 })
 
 const isEditing = ref(false)
+//Feature/markdown-live-preview
+const { startEditing: notifyStart, updateContent, stopEditing: notifyStop } = useEditingNode()
+
 const textareaRef = ref(null)
 
 const startEditing = () => {
   isEditing.value = true
+  console.log('started editing node:', props.id) // 👈 temporary debug
+  notifyStart(props.id, props.data.label) // 👈 tell the panel we're editing
   nextTick(() => {
     textareaRef.value?.focus()
   })
@@ -66,6 +72,7 @@ const startEditing = () => {
 
 const stopEditing = () => {
   isEditing.value = false
+  notifyStop() // 👈 tell the panel to hide
 }
 
 const renderedContent = computed(() => {
@@ -75,6 +82,14 @@ const renderedContent = computed(() => {
 const onDelete = () => {
   window.dispatchEvent(new CustomEvent('delete-node', { detail: props.id }))
 }
+
+watch(
+  ()=>props.data.label,
+  (newVal)=>{
+    if (isEditing.value) updateContent(newVal)
+  }
+)
+
 </script>
 
 <style>
