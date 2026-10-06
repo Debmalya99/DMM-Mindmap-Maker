@@ -35,12 +35,18 @@
         </div>
 
         <div class="sidebar-body" v-if="!isToolbarCollapsed">
-          <button @click="addNode()" class="btn primary">Add Node</button>
+          <button @click="addNode()" class="btn primary" v-if="!isReadOnly">Add Node</button>
           <button @click="recenterMap" class="btn secondary">Re-center MindMap</button>
+          <!-- Feature/read-only -->
+          <button @click="toggleReadOnly" class="btn"
+          :class="isReadOnly ? 'primary' : 'secondary'"
+          >
+            {{ isReadOnly ? 'Enable Editing':'Enable Read-Only' }}
+          </button>
 
           <!-- Node Options (Shows up when one or more nodes are selected) -->
           <NodeOptionsPanel
-            v-if="hasNodeSelection"
+            v-if="hasNodeSelection && !isReadOnly"
             :colors="colors"
             :nodes="nodes"
             :selected-node-id="selectedNodeId"
@@ -53,7 +59,7 @@
 
           <!-- Connector Direction (Shows up when a connector is selected) -->
           <ConnectorOptionsPanel
-            v-if="selectedEdgeId"
+            v-if="selectedEdgeId && !isReadOnly"
             :edge="getSelectedEdge"
             :direction-label="getEdgeDirectionLabel"
             @switch-direction="switchEdgeDirection"
@@ -109,7 +115,7 @@
           @close="closeContextMenu"
         >
           <NodeOptionsPanel
-            v-if="contextMenu.target === 'node'"
+            v-if="contextMenu.target === 'node' && !isReadOnly"
             :colors="colors"
             :nodes="nodes"
             :selected-node-id="selectedNodeId"
@@ -121,7 +127,7 @@
           />
 
           <ConnectorOptionsPanel
-            v-else-if="contextMenu.target === 'edge'"
+            v-else-if="contextMenu.target === 'edge' && !isReadOnly"
             :edge="getSelectedEdge"
             :direction-label="getEdgeDirectionLabel"
             @switch-direction="switchEdgeDirection"
@@ -132,8 +138,14 @@
 
           <template v-else>
             <h3 class="context-menu-title">Mindmap</h3>
-            <button @click="addNodeFromMenu" class="btn primary">Add Node</button>
+            <button @click="addNodeFromMenu" class="btn primary" v-if="!isReadOnly">Add Node</button>
             <button @click="recenterMap" class="btn secondary">Re-center MindMap</button>
+            <!-- Feature/read-only -->
+            <button @click="toggleReadOnly" class="btn"
+            :class="isReadOnly ? 'primary' : 'secondary'"
+            >
+              {{ isReadOnly ? 'Enable Editing':'Enable Read-Only' }}
+            </button>
             <hr />
             <button @click="saveMindmap" class="btn secondary">Save</button>
             <button @click="saveAsMindmap" class="btn secondary">Save As</button>
@@ -167,6 +179,9 @@ import '@vue-flow/controls/dist/style.css'
 //Feature/markdown-live-preview
 import LivePreviewPanel from './components/LivePreviewPanel.vue'
 
+//Feature/read-only
+import { useReadOnly } from './composables/useReadOnly.js'
+
 const isToolbarCollapsed = ref(false)
 const isConnecting = ref(false)
 const selectedNodeId = ref(null)
@@ -174,6 +189,9 @@ const selectedEdgeId = ref(null)
 const currentFileHandle = ref(null)
 const saveStatus = ref('') // '' | 'saving' | 'saved'
 let saveTimer = null
+
+//Feature/read-only
+const {isReadOnly,toggleReadOnly} = useReadOnly()
 
 // Where the right-click menu is anchored and what it should offer.
 // target is 'node' | 'edge' | 'pane', and flowPosition is the clicked spot

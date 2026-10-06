@@ -42,6 +42,9 @@ import katex from 'katex'
 import { renderMarkdown } from '../utils/markdownRenderer'
 import { useEditingNode } from '../composables/useEditingNode'
 
+//Feature/read-only
+import { useReadOnly } from '../composables/useReadOnly'
+
 // Import styles
 import '@vue-flow/node-resizer/dist/style.css'
 import 'katex/dist/katex.min.css'
@@ -61,9 +64,13 @@ const isEditing = ref(false)
 //Feature/markdown-live-preview
 const { startEditing: notifyStart, updateContent, stopEditing: notifyStop } = useEditingNode()
 
+//Feature/read-only
+const {isReadOnly} = useReadOnly()
+
 const textareaRef = ref(null)
 
 const startEditing = () => {
+  if (isReadOnly.value) return
   isEditing.value = true
   console.log('started editing node:', props.id) // 👈 temporary debug
   notifyStart(props.id, props.data.label) // 👈 tell the panel we're editing
