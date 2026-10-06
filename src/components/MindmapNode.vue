@@ -17,6 +17,8 @@
         v-model="data.label"
         @blur="stopEditing"
         @click.stop
+        @keydown.tab.prevent="handleTab"
+        @keydown.shift.tab.prevent="handleShiftTab"
         placeholder="Type markdown / LaTeX..."
         class="nokey"
       ></textarea>
@@ -89,6 +91,71 @@ watch(
     if (isEditing.value) updateContent(newVal)
   }
 )
+
+// Feature/markdown-live-preview: Adding tab key support in the text area.
+const INDENT = '\t' // 4 spaces can be changed to 2 spaces or \t for a real tab.
+
+const handleTab = () => {
+  const el = textareaRef.value
+  if (!el) return
+
+  const value = el.value
+  const start = el.selectionStart
+  const end = el.selectionEnd
+
+  // Find the boundaries of the lines touched by the selection
+  const lineStart = value.lastIndexOf('\n', start - 1) + 1
+  const lineEnd = value.indexOf('\n', end) === -1 ? value.length : value.indexOf('\n', end)
+
+  const selectedText = value.substring(lineStart, lineEnd)
+  const lines = selectedText.split('\n')
+  const indented = lines.map((line) => INDENT + line).join('\n')
+
+  // Replace the whole block in one go
+  el.setRangeText(indented, lineStart, lineEnd, 'preserve')
+
+  // Manually nudge the selection so the highlighted text stays highlighted
+  el.selectionStart = start + INDENT.length
+  el.selectionEnd = end + INDENT.length * lines.length
+
+  // Tell Vue the value changed (this is what v-model listens for)
+  el.dispatchEvent(new Event('input', { bubbles: true }))
+}
+
+// DOES NOT WORK
+const handleShiftTab = () => {
+  const el = textareaRef.value
+  if (!el) return
+
+  const value = el.value
+  const start = el.selectionStart
+  const end = el.selectionEnd
+
+  const lineStart = value.lastIndexOf('\n', start - 1) + 1
+  const lineEnd = value.indexOf('\n', end) === -1 ? value.length : value.indexOf('\n', end)
+
+  const selectedText = value.substring(lineStart, lineEnd)
+  const lines = selectedText.split('\n')
+
+  // Remove up to INDENT.length leading spaces (or a tab) from each line
+  const outdented = lines
+    .map((line) => {
+      if (line.startsWith('\t')) return line.substring(1)
+      let removed = 0
+      while (removed < INDENT.length && line[removed] === ' ') removed++
+      return line.substring(removed)
+    })
+    .join('\n')
+
+  el.setRangeText(outdented, lineStart, lineEnd, 'preserve')
+
+  // Adjust selection after removal
+  const removedTotal = selectedText.length - outdented.length
+  el.selectionStart = Math.max(lineStart, start - INDENT.length)
+  el.selectionEnd = end - removedTotal
+
+  el.dispatchEvent(new Event('input', { bubbles: true }))
+}
 
 </script>
 
