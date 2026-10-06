@@ -36,6 +36,9 @@ import { NodeResizer } from '@vue-flow/node-resizer'
 import { marked } from 'marked'
 import katex from 'katex'
 
+// Feature/markdown-live-preview: Import the util
+import { renderMarkdown } from '../utils/markdownRenderer'
+
 // Import styles
 import '@vue-flow/node-resizer/dist/style.css'
 import 'katex/dist/katex.min.css'
@@ -66,25 +69,7 @@ const stopEditing = () => {
 }
 
 const renderedContent = computed(() => {
-  const text = props.data.label || ''
-  // Process KaTeX math blocks $$...$$ or inline $...$
-  let processed = text
-    .replace(/\$\$([\s\S]*?)\$\$/g, (_, math) => {
-      try {
-        return katex.renderToString(math.trim(), { displayMode: true, throwOnError: false })
-      } catch (e) {
-        return `[Math Error: ${e.message}]`
-      }
-    })
-    .replace(/\$([^\$]+?)\$/g, (_, math) => {
-      try {
-        return katex.renderToString(math.trim(), { displayMode: false, throwOnError: false })
-      } catch (e) {
-        return `[Math Error: ${e.message}]`
-      }
-    })
-
-  return marked.parse(processed)
+  return renderMarkdown(props.data.label);
 })
 
 const onDelete = () => {
