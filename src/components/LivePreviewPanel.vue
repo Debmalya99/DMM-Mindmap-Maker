@@ -9,13 +9,27 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, watch, ref } from 'vue'
 import { useEditingNode } from '../composables/useEditingNode.js'
 import { renderMarkdown } from '../utils/markdownRenderer.js'
 
 const { editingNodeId, editingNodeContent, stopEditing } = useEditingNode()
 
-const rendered = computed(() => renderMarkdown(editingNodeContent.value))
+const rendered = ref('')
+let debounceTimer = null
+
+
+// Debounce for optimization
+watch(
+  editingNodeContent,
+  (newContent)=>{
+    clearTimeout(debounceTimer)
+    debounceTimer = setTimeout(()=>{rendered.value = renderMarkdown(newContent)},100)
+    
+  },{immediate:true}
+)
+
+// const rendered = computed(() => renderMarkdown(editingNodeContent.value))
 </script>
 
 <style scoped>

@@ -20,11 +20,11 @@
         @keydown.tab.prevent="handleTab"
         @keydown.shift.tab.prevent="handleShiftTab"
         placeholder="Type markdown / LaTeX..."
-        class="nokey"
+        class="nokey nowheel"
       ></textarea>
 
       <!-- View Mode: Rendered Markdown & LaTeX -->
-      <div v-else class="rendered-content" v-html="renderedContent"></div>
+      <div v-else class="rendered-content nowheel" v-html="renderedContent"></div>
 
       <button @click.stop="onDelete" class="delete-btn" title="Delete node">&times;</button>
     </div>
