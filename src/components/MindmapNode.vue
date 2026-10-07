@@ -28,6 +28,7 @@
 
       <button @click.stop="onDelete" class="delete-btn" title="Delete node">&times;</button>
     </div>
+    <div class="nodelock-btn" title="Position is Locked for this node" v-if="data.draggable">&#128274;</div>
   </div>
 </template>
 
@@ -319,6 +320,25 @@ const handleShiftTab = () => {
 .delete-btn:hover {
   color: #fff;
   background: #e74c3c;
+}
+
+.nodelock-btn {
+  position: absolute;
+  bottom: 2px;
+  left: 2px;
+  background: transparent;
+  border: none;
+  font-size: 1.0rem;
+  color: #999;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  z-index: 5;
+  opacity: 1;
+}
+
+.nodelock-btn:hover{
+  opacity: 0.2;
 }
 
 /* Tiny connection handles styling */

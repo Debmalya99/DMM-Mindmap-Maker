@@ -502,7 +502,10 @@ const lockNodePosition = () => {
 
     // At the beginning, the draggable will be undefined so that will be treated as false.
     node.draggable = node.draggable === false
-    
+
+    // The following 2 lines are here to pass this "draggable" info into the data object to be used elsewhere as props.
+    if (!node.data) node.data = {}
+    node.data.draggable = node.draggable === false
   }
 }
 
