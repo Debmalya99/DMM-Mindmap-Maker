@@ -1,7 +1,7 @@
 <template>
   <div class="custom-mindmap-node" :style="{ backgroundColor: data.bgColor || '#fffff0' }">
     <!-- Built-in Vue Flow Node Resizer with bottom-right handle -->
-    <NodeResizer :min-width="140" :min-height="140" />
+    <NodeResizer :min-width="140" :min-height="data.label.length >= 100 ? 140:60" />
 
     <!-- 4 Connection Handles with unique IDs for precise pin-to-pin connections -->
     <Handle id="top" type="source" :position="Position.Top" class="handle top" />
