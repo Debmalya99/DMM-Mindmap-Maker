@@ -73,7 +73,6 @@ const textareaRef = ref(null)
 const startEditing = () => {
   if (isReadOnly.value) return
   isEditing.value = true
-  console.log('started editing node:', props.id) // 👈 temporary debug
   notifyStart(props.id, props.data.label) // 👈 tell the panel we're editing
   nextTick(() => {
     textareaRef.value?.focus()
