@@ -101,6 +101,7 @@
           @pane-context-menu="onPaneContextMenu"
           class="vue-flow-canvas"
         >
+          <DocumentTitle :document-name="currentFileName" v-if="isToolbarCollapsed"/>
           <Background pattern-color="#aaa" :gap="16" />
           <Controls>
             <template #default>
@@ -192,6 +193,7 @@ import HelpPopover from './components/HelpPopover.vue'
 import NodeOptionsPanel from './components/NodeOptionsPanel.vue'
 import ConnectorOptionsPanel from './components/ConnectorOptionsPanel.vue'
 import ContextMenu from './components/ContextMenu.vue'
+import DocumentTitle from './components/DocumentTitle.vue'
 
 // Import Vue Flow styles required for UI rendering
 import '@vue-flow/core/dist/style.css'
