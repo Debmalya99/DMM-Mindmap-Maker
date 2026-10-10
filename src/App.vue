@@ -7,78 +7,42 @@
     </div>
     <main class="main-content">
       <!-- Collapsible Sidebar / Toolbar -->
-      <aside class="sidebar" :class="{ collapsed: isToolbarCollapsed }">
-        <div class="sidebar-header">
-          <button @click="toggleToolbar" class="hamburger-btn" title="Toggle Toolbar">
-            ☰
-          </button>
-          <div class="header-titles" v-if="!isToolbarCollapsed">
-            <div class="title-row">
-              <h3 class="current-file-name" :title="currentFileName">{{ currentFileName }}</h3>
-              <HelpPopover>
-                <small>Drag from any pin (top, bottom, left, right) to another pin to create precise solid connections. Click a node to edit markdown/LaTeX or change its color. Shift-LeftClick & Drag to select multiple nodes. Right-click a node, a connector, or the canvas to get the same options as this toolbar.</small>
-                <div class="help-shortcuts">
-                  <small><strong>Ctrl+A</strong> add node &middot; <strong>Ctrl+D</strong> duplicate &middot; <strong>Ctrl+S</strong> save &middot; <strong>Ctrl+O</strong> open &middot; <strong>D</strong> edge direction &middot; <strong>S</strong> edge style &middot; <strong>Esc</strong> deselect current node &middot; <strong>T</strong> Toggle this toolbar
-                  </small>
-                </div>
-              </HelpPopover>
-              
-              <HelpPopover icon="🛈">
-                <small>Mindmap Information</small>
-                <hr>
-                <span>Nodes: {{ nodes.length }}</span> | <span>Connections: {{ edges.length }}</span>
-                <hr>
-                <span><strong>Current File Name:</strong> {{ currentFileName }}</span>
-              </HelpPopover>
-            </div>
-          </div>
-        </div>
+      <!-- REFACTOR/Sidebar -->
+      <LeftSidebar
+        :is-toolbar-collapsed="isToolbarCollapsed"
+        :current-file-name="currentFileName"
+        :nodes="nodes"
+        :edges="edges"
+        :is-read-only="isReadOnly"
 
-        <div class="sidebar-body" v-if="!isToolbarCollapsed">
-          <button @click="addNode()" class="btn primary" v-if="!isReadOnly">Add Node</button>
-          <button @click="recenterMap" class="btn secondary">Re-center MindMap</button>
-          <!-- Feature/read-only -->
-          <button @click="toggleReadOnly" class="btn"
-          :class="isReadOnly ? 'primary' : 'secondary'"
-          >
-            {{ isReadOnly ? 'Enable Editing':'Enable Read-Only' }}
-          </button>
+        :has-node-selection="hasNodeSelection"
+        :colors="colors"
+        :selected-node-id="selectedNodeId"
+        :selected-node-ids="selectedNodeIds"
 
-          <!-- Node Options (Shows up when one or more nodes are selected) -->
-          <NodeOptionsPanel
-            v-if="hasNodeSelection && !isReadOnly"
-            :colors="colors"
-            :nodes="nodes"
-            :selected-node-id="selectedNodeId"
-            :selected-node-ids="selectedNodeIds"
-            @duplicate="duplicateSelectedNodes"
-            @update-color="updateNodeColor"
-            @update-zindex="updateNodeZIndex"
-            @lock-movement="lockNodePosition"
-          />
+        :edge="getSelectedEdge"
+        :selected-edge-id="selectedEdgeId"
+        :direction-label="getEdgeDirectionLabel"
 
-          <!-- Connector Direction (Shows up when a connector is selected) -->
-          <ConnectorOptionsPanel
-            v-if="selectedEdgeId && !isReadOnly"
-            :edge="getSelectedEdge"
-            :direction-label="getEdgeDirectionLabel"
-            @switch-direction="switchEdgeDirection"
-            @update-label="updateEdgeLabel"
-            @toggle-style="toggleEdgeStyle"
-            @remove="deleteSelectedEdge"
-          />
-        </div>
+        @toggle-toolbar="toggleToolbar"
+        @add-node="addNode()"
+        @recenter-mindmap="recenterMap"
+        @toggle-readonly="toggleReadOnly"
 
-        <div class="toolbar-actions" v-if="!isToolbarCollapsed">
-          <button @click="saveMindmap" class="btn action-btn">Save</button>
-          <button @click="saveAsMindmap" class="btn action-btn">Save As</button>
-          <button @click="loadMindmap" class="btn action-btn">Load</button>
-        </div>
+        @save-mindmap="saveMindmap"
+        @save-as-mindmap="saveAsMindmap"
+        @load-mindmap="loadMindmap"
 
-        <!-- <div class="toolbar-footer" v-if="!isToolbarCollapsed">
-          <span>Nodes: {{ nodes.length }}</span> | <span>Connections: {{ edges.length }}</span>
-        </div> -->
-      </aside>
+        @duplicate="duplicateSelectedNodes"
+        @update-color="updateNodeColor"
+        @update-zindex="updateNodeZIndex"
+        @lock-movement="lockNodePosition"
+
+        @switch-direction="switchEdgeDirection"
+        @update-label="updateEdgeLabel"
+        @toggle-style="toggleEdgeStyle"
+        @remove-edge="deleteSelectedEdge"
+      />
 
       <section class="canvas-area">
         <TopNavBar />
@@ -195,6 +159,8 @@ import ConnectorOptionsPanel from './components/ConnectorOptionsPanel.vue'
 import ContextMenu from './components/ContextMenu.vue'
 import DocumentTitle from './components/DocumentTitle.vue'
 
+import LeftSidebar from './components/LeftSidebar.vue'
+
 // Import Vue Flow styles required for UI rendering
 import '@vue-flow/core/dist/style.css'
 import '@vue-flow/core/dist/theme-default.css'
@@ -205,6 +171,9 @@ import LivePreviewPanel from './components/LivePreviewPanel.vue'
 
 //Feature/read-only
 import { useReadOnly } from './composables/useReadOnly.js'
+
+//REFACTOR/Sidebar
+import '../src/main.css'
 
 const isToolbarCollapsed = ref(false)
 const isConnecting = ref(false)
@@ -917,354 +886,9 @@ onMounted(() => {
 </script>
 
 <style>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  background-color: #f4f7f6;
-  color: #333;
-}
-
 .mindmap-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
-}
-
-.main-content {
-  display: flex;
-  flex: 1;
-  overflow: hidden;
-}
-
-.sidebar {
-  width: 260px;
-  background: white;
-  border-right: 1px solid #e0e0e0;
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  z-index: 10;
-  position: relative;
-  transition: width 0.3s ease, padding 0.3s ease;
-}
-
-/* Collapsed: the panel itself disappears, leaving only a floating hamburger */
-.sidebar.collapsed {
-  width: 0;
-  padding: 0;
-  gap: 0;
-  background: transparent;
-  border-right-color: transparent;
-  overflow: visible;
-}
-
-.sidebar-header {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.header-titles {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-width: 0;
-}
-
-.current-file-name {
-  font-size: 1.05rem;
-  color: #2c3e50;
-  font-weight: 600;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.sidebar.collapsed .sidebar-header {
-  position: absolute;
-  top: 0.75rem;
-  left: 0.75rem;
-}
-
-.sidebar.collapsed .hamburger-btn {
-  background: transparent;
-  border-color: transparent;
-  color: #2c3e50;
-  opacity: 0.55;
-}
-
-.sidebar.collapsed .hamburger-btn:hover {
-  background: rgba(255, 255, 255, 0.75);
-  border-color: #d0d7de;
-  opacity: 1;
-}
-
-.hamburger-btn {
-  background: #f0f2f5;
-  border: 1px solid #d0d7de;
-  border-radius: 4px;
-  width: 36px;
-  height: 36px;
-  font-size: 1.2rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #2c3e50;
-  transition: background 0.2s, border-color 0.2s, opacity 0.2s;
-}
-
-.hamburger-btn:hover {
-  background: #e1e4e8;
-}
-
-.sidebar h2 {
-  font-size: 1.2rem;
-  color: #2c3e50;
-}
-
-.sidebar-body {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  flex: 1;
-}
-
-.btn {
-  padding: 0.6rem 1rem;
-  border: none;
-  border-radius: 4px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.btn.primary {
-  background: #42b883;
-  color: white;
-}
-
-.btn.primary:hover {
-  background: #3aa876;
-}
-
-.btn.secondary {
-  background: #e0e0e0;
-  color: #333;
-}
-
-.btn.secondary:hover {
-  background: #d0d0d0;
-}
-
-.btn.danger {
-  background: #e07163;
-  color: white;
-}
-
-.btn.danger:hover {
-  background: #cf6052;
-}
-
-/* Keep rendered connector labels small and legible */
-.vue-flow__edge-textbg {
-  fill: #f5f1eb;
-}
-
-.vue-flow__edge-text {
-  font-size: 20px;
-  fill: #2c3e50;
-}
-
-/* Unscoped, global style block */
-.vue-flow__edge.selected .vue-flow__edge-path {
-  stroke: #0caded !important; /* Or any color you prefer */
-  stroke-width: 3 !important; /* Optional: make it slightly thicker too */
-}
-
-.title-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-}
-
-.help-tooltip-container {
-  position: relative;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-}
-
-.help-icon {
-  font-size: 1.1rem;
-  padding: 2px 6px;
-  border-radius: 50%;
-  transition: background 0.2s;
-}
-
-.help-icon:hover {
-  background: #f0f2f5;
-}
-
-.help-popover {
-  visibility: hidden;
-  opacity: 0;
-  position: absolute;
-  left: 30px;
-  top: 0;
-  width: 240px;
-  background: white;
-  color: #333;
-  padding: 0.8rem;
-  border-radius: 6px;
-  border: 1px solid #d0d7de;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  z-index: 100;
-  transition: opacity 0.2s ease, visibility 0.2s ease;
-  font-size: 0.8rem;
-  line-height: 1.4;
-}
-
-.help-tooltip-container:hover .help-popover {
-  visibility: visible;
-  opacity: 1;
-}
-
-.help-shortcuts {
-  margin-top: 0.6rem;
-  padding-top: 0.5rem;
-  border-top: 1px solid #e8e8e8;
-  color: #555;
-}
-
-.help-shortcuts strong {
-  color: #247ad1;
-  font-weight: 600;
-}
-
-.toolbar-actions {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: auto;
-  padding-top: 0.75rem;
-}
-
-.toolbar-actions .action-btn {
-  flex: 1;
-  background: #247ad1;
-  color: white;
-}
-
-.toolbar-actions .action-btn:hover {
-  background: #1f68b3;
-}
-
-.toolbar-footer {
-  font-size: 0.85rem;
-  color: #555;
-  text-align: center;
-  padding-top: 0.5rem;
-  border-top: 1px solid #eee;
-  white-space: nowrap;
-}
-
-.canvas-area {
-  flex: 1;
-  background: #f5f1eb;
-  position: relative;
-}
-
-.vue-flow-canvas {
-  width: 100%;
-  height: 100%;
-}
-
-.vue-flow__node{
-  border: 2px dashed transparent;
-  transition: border-color 0.3s ease;
-}
-
-/* Remove Vue Flow selection outline and resizer border */
-.vue-flow__node.selected {
-  /*border: none !important;*/
-  border: 2px dashed blue;
-
-  border-radius: 20px;
-  box-shadow: none !important;
-  outline: none !important;
-}
-
-.vue-flow__node-resizer {
-  border-color: transparent !important;
-}
-
-.vue-flow__node-resizer line {
-  stroke: transparent !important;
-}
-
-/* Context menu content is authored here but rendered in ContextMenu.vue */
-.context-menu-title {
-  font-size: 0.9rem;
-  color: #2c3e50;
-}
-
-.context-menu hr {
-  width: 100%;
-  margin: 2px 0;
-  border: none;
-  border-top: 1px solid #e8e8e8;
-}
-
-.save-indicator {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 9999;
-  background: rgba(33, 37, 41, 0.9);
-  color: white;
-  padding: 10px 16px;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(10px);
-  transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s ease;
-  pointer-events: none;
-}
-
-.save-indicator.visible {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
-.save-indicator .spinner {
-  width: 14px;
-  height: 14px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: #42b883;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-.save-indicator .save-icon {
-  color: #42b883;
-  font-weight: bold;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
 }
 </style>
