@@ -172,6 +172,9 @@ import LivePreviewPanel from './components/LivePreviewPanel.vue'
 //Feature/read-only
 import { useReadOnly } from './composables/useReadOnly.js'
 
+// REFACTOR/save-load-composable
+import { useSaveLoad } from './composables/useSaveLoad.js'
+
 //REFACTOR/Sidebar
 import '../src/main.css'
 
@@ -179,9 +182,7 @@ const isToolbarCollapsed = ref(false)
 const isConnecting = ref(false)
 const selectedNodeId = ref(null)
 const selectedEdgeId = ref(null)
-const currentFileHandle = ref(null)
-const saveStatus = ref('') // '' | 'saving' | 'saved'
-let saveTimer = null
+
 
 //Feature/toggle-live-preview-visiblity
 const isLivePreviewVisible = ref(true)
@@ -208,23 +209,6 @@ const generateId = () => {
   idCounter += 1
   return `node-${Date.now()}-${idCounter}`
 }
-
-const currentFileName = computed(() => {
-  if (!currentFileHandle.value || !currentFileHandle.value.name) {
-    return 'untitled*'
-  }
-  let name = currentFileHandle.value.name
-  if (name.endsWith('.dmm.json')) {
-    name = name.slice(0, -9)
-  } else if (name.endsWith('.json')) {
-    name = name.slice(0, -5)
-  }
-  return name
-})
-
-watchEffect(() => {
-  document.title = `Mindmap Maker | ${currentFileName.value}`
-})
 
 const colors = ['#fffff0', '#8bbd88', '#e07163', '#6a8aeb', '#e6eb6a']
 
@@ -327,6 +311,31 @@ watch([nodes, edges], () => {
 */
 
 const { onConnect, addEdges, fitView, screenToFlowCoordinate } = useVueFlow()
+
+const {
+        currentFileHandle,
+        saveStatus,
+        saveTimer,
+        executeSave,
+        loadMindmap
+} = useSaveLoad(nodes,edges,edgeStyle,buildMarker,selectedNodeId,selectedEdgeId)
+
+const currentFileName = computed(() => {
+  if (!currentFileHandle.value || !currentFileHandle.value.name) {
+    return 'untitled*'
+  }
+  let name = currentFileHandle.value.name
+  if (name.endsWith('.dmm.json')) {
+    name = name.slice(0, -9)
+  } else if (name.endsWith('.json')) {
+    name = name.slice(0, -5)
+  }
+  return name
+})
+
+watchEffect(() => {
+  document.title = `Mindmap Maker | ${currentFileName.value}`
+})
 
 onConnect((connection) => {
   if (connection.source === connection.target) return
@@ -661,100 +670,9 @@ const deleteSelectedEdge = () => {
   selectedEdgeId.value = null
 }
 
-const executeSave = async (isSaveAs = false) => {
-  if (!window.showSaveFilePicker) {
-    alert('File System Access API is not supported in this browser.')
-    return
-  }
-  saveStatus.value = 'saving'
-  if (saveTimer) clearTimeout(saveTimer)
-  try {
-    let handle = currentFileHandle.value
-    if (isSaveAs || !handle) {
-      handle = await window.showSaveFilePicker({
-        types: [
-          {
-            description: 'Mindmap Files (.dmm.json)',
-            accept: { 'application/json': ['.dmm.json'] },
-          },
-        ],
-      })
-      currentFileHandle.value = handle
-    }
-    const writable = await handle.createWritable()
-    const state = {
-      nodes: toRaw(nodes.value),
-      edges: toRaw(edges.value),
-    }
-    await writable.write(JSON.stringify(state, null, 2))
-    await writable.close()
-    saveStatus.value = 'saved'
-    saveTimer = setTimeout(() => {
-      saveStatus.value = ''
-    }, 2000)
-  } catch (err) {
-    saveStatus.value = ''
-    if (err.name !== 'AbortError') {
-      console.error('Failed to save mindmap:', err)
-      alert('Failed to save mindmap file.')
-    }
-  }
-}
-
 const saveAsMindmap = () => executeSave(true)
 
 const saveMindmap = () => executeSave(false)
-
-const loadMindmap = async () => {
-  if (!window.showOpenFilePicker) {
-    alert('File System Access API is not supported in this browser.')
-    return
-  }
-  try {
-    const [handle] = await window.showOpenFilePicker({
-      types: [
-        {
-          description: 'Mindmap Files (.dmm.json, .json)',
-          accept: { 'application/json': ['.dmm.json', '.json'] },
-        },
-      ],
-      multiple: false,
-    })
-    currentFileHandle.value = handle
-    const file = await handle.getFile()
-    const content = await file.text()
-    const parsed = JSON.parse(content)
-
-    if (parsed.nodes) {
-      nodes.value = parsed.nodes.map((n) => {
-        const z = Number.isFinite(n.zIndex) ? Math.floor(n.zIndex) : (Number.isFinite(n.data?.zIndex) ? Math.floor(n.data.zIndex) : 0)
-        const style = n.style ? { ...n.style } : {}
-        style.zIndex = z
-        return {
-          ...n,
-          zIndex: z,
-          data: n.data ? { ...n.data, zIndex: z } : { zIndex: z },
-          style,
-        }
-      })
-    }
-    if (parsed.edges) {
-      edges.value = parsed.edges.map((e) => ({
-        ...e,
-        style: e.style || edgeStyle,
-        markerStart: e.data?.dirMode === 2 || e.data?.dirMode === 3 ? buildMarker() : undefined,
-        markerEnd: e.data?.dirMode === 1 || e.data?.dirMode === 3 ? buildMarker() : undefined,
-      }))
-    }
-    selectedNodeId.value = null
-    selectedEdgeId.value = null
-  } catch (err) {
-    if (err.name !== 'AbortError') {
-      console.error('Failed to load mindmap:', err)
-      alert('Failed to load mindmap file.')
-    }
-  }
-}
 
 const recenterMap = () => {
   fitView({ padding: 0.2, duration: 800 })
