@@ -809,4 +809,8 @@ onMounted(() => {
   flex-direction: column;
   height: 100vh;
 }
+
+.vue-flow__edge-textbg {
+  fill: #f5f1eb;
+}
 </style>
