@@ -12,7 +12,7 @@
       </svg>
     </a>
     <a
-      href="https://github.com/Debmalya99/Deb-s-Mindmap-Maker"
+      href="https://github.com/Debmalya99/DMM-Mindmap-Maker"
       target="_blank"
       rel="noopener noreferrer"
       class="nav-icon-btn"
